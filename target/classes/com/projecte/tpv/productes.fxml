@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.tpv.ProducteController">
+   <children>
+      <AnchorPane prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#back" prefWidth="100.0" prefHeight="30.0" text="Back" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" >
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-danger" />
+                  <String fx:value="btn-sm" />
+               </styleClass>
+            </Button>
+            <Label layoutX="100.0" layoutY="7.0" text="Label" AnchorPane.leftAnchor="100.0" />
+            <StackPane alignment="CENTER_RIGHT" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <TextField />
+                  <Button mnemonicParsing="false" prefWidth="39.0" text="Button" />
+               </children>
+            </StackPane>
+         </children>
+      </AnchorPane>
+      <TabPane fx:id="tabPane" layoutX="16.0" layoutY="72.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0" />
+      <Button layoutX="908.0" layoutY="547.0" mnemonicParsing="false" onAction="#addProduct" text="Afegir" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" >
+         <styleClass>
+            <String fx:value="btn-success" />
+            <String fx:value="btn" />
+            <String fx:value="btn-sm" />
+         </styleClass>
+      </Button>
+   </children>
+   <padding>
+      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+   </padding>
+</AnchorPane>

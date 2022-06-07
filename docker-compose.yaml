@@ -1,0 +1,24 @@
+version: '3.3'
+services:
+  mysql:
+    image: mysql:latest
+    ports:
+      - 33060:33060
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: tpv2
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypass
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+volumes:
+  mysql:
+  mongo:

@@ -1,0 +1,32 @@
+/*.btnInici{
+	-fx-background-color: red;
+    -fx-background-radius: 16;
+}
+
+#prodBox{
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(three-pass-box, grey, 4, 0, 4, 4);
+}*/
+
+.btn1{
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+.btn2{
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+}
+
+.products{
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
+}
+.prodcutsBox{
+    -fx-padding: 4;
+    -fx-alignment: center;
+}
+.teclat>Button{
+    -fx-border-style: none;
+}

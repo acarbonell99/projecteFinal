@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+
+<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@css/estils.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.tpv.HelloController">
+  <columnConstraints>
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Button mnemonicParsing="false" onAction="#toPrevenda" prefHeight="120.0" prefWidth="180.0" style="-fx-border-radius: 16; -fx-background-radius: 16;" text="Prevenda" GridPane.columnIndex="1">
+         <styleClass>
+            <String fx:value="btn" />
+            <String fx:value="btn-info" />
+         </styleClass></Button>
+      <Button fx:id="btnVenda" disable="true" mnemonicParsing="false" onAction="#toVenda" prefHeight="120.0" prefWidth="180.0" style="-fx-border-radius: 16; -fx-background-radius: 16;" text="Venda" GridPane.columnIndex="2">
+         <styleClass>
+            <String fx:value="btn" />
+            <String fx:value="btn-info" />
+         </styleClass></Button>
+      <Button fx:id="btnPostvenda" disable="true" mnemonicParsing="false" onAction="#toPsotvenda" prefHeight="120.0" prefWidth="180.0" style="-fx-border-radius: 16; -fx-background-radius: 16;" text="Postvenda" GridPane.columnIndex="3">
+         <styleClass>
+            <String fx:value="btn" />
+            <String fx:value="btn-info" />
+         </styleClass></Button>
+   </children>
+   <padding>
+      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+   </padding>
+</GridPane>

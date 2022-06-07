@@ -1,0 +1,161 @@
+package com.projecte.tpv;
+
+import com.projecte.tpv.model.Producte;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import static com.projecte.tpv.DatabaseSql.*;
+import static com.projecte.tpv.Generals.closeWindow;
+import static com.projecte.tpv.ProducteController.row;
+import static com.projecte.tpv.model.Producte.nextId;
+
+public class FitxaController implements Initializable {
+
+    @FXML
+    public Button btnCancel;
+    public Button btnSave;
+    public ImageView image;
+    public Button btnAddPhoto;
+    public Button btnDelPhoto;
+    String cat = "";
+
+    String imagePath = "img";
+
+
+    public ChoiceBox selCat;
+    public TextField fieldId;
+    public TextField fieldNom;
+    public TextField fieldDesc;
+    public TextField fieldCost;
+    public TextField fieldPvp;
+    public CheckBox checkVendible;
+    public CheckBox checkCons;
+    public TextField fieldStock;
+    public TextField fieldCant;
+
+
+    public void choiseCat() throws SQLException {
+        List<String> cat = new ArrayList<>();
+        ResultSet resultSet = gueryGeneric("categoria");
+        while (resultSet.next()) {
+            cat.add(resultSet.getString(2));
+        }
+        selCat.setItems(FXCollections.observableList(cat));
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (row != 0){
+            try {
+                ompirFitxa(selProd(row));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        try {
+            choiseCat();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        selCat.getSelectionModel().selectedItemProperty().addListener(v -> {
+            try {
+                fieldId.setText(String.valueOf(nextId(String.valueOf(selCat.getSelectionModel().getSelectedItem()))));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void ompirFitxa(Producte p) throws SQLException {
+        btnSave.setText("Edit");
+        active(true);
+        fieldId.setText(String.valueOf(p.getId_prod()));
+        fieldId.setDisable(true);
+        fieldNom.setText(p.getNom());
+        fieldDesc.setText(p.getDescripcio());
+        fieldCost.setText(String.valueOf(p.getPreu_compra()));
+        fieldPvp.setText(String.valueOf(p.getPreu_venda()));
+        fieldCant.setText(String.valueOf(p.getCant()));
+        fieldStock.setText(String.valueOf(p.getStockMin()));
+        checkVendible.setSelected(p.isVendible());
+        checkCons.setSelected(p.isConsumible());
+        selCat.setValue(queryNomCat(p.getId_cat()));
+        selCat.setDisable(true);
+        if (!p.getImg().equals("img")) image.setImage(new Image(p.getImg()));
+    }
+
+    public void active(boolean b){
+        fieldNom.setDisable(b);
+        fieldDesc.setDisable(b);
+        fieldCost.setDisable(b);
+        fieldPvp.setDisable(b);
+        fieldCant.setDisable(b);
+        fieldStock.setDisable(b);
+        checkVendible.setDisable(b);
+        checkCons.setDisable(b);
+        btnAddPhoto.setDisable(b);
+        btnDelPhoto.setDisable(b);
+        if (b) btnSave.setText("Edit");
+        else btnSave.setText("Save");
+
+    }
+
+
+    public void save(ActionEvent event) throws SQLException {
+        if (btnSave.getText().equals("Edit")){
+            active(false);
+        } else if (btnSave.getText().equals("Save")){
+            updateProd(new Producte(Integer.parseInt(fieldId.getText()), fieldNom.getText(), fieldDesc.getText(), Integer.parseInt(fieldCant.getText()), Integer.parseInt(fieldStock.getText()), queryIdCat(String.valueOf(selCat.getSelectionModel().getSelectedItem())), Double.parseDouble(fieldPvp.getText()), Double.parseDouble(fieldCost.getText()), Integer.parseInt(String.valueOf(10)), imagePath, checkCons.isSelected(), checkVendible.isSelected()));
+            closeWindow(btnCancel);
+        } else {
+            insertProd(new Producte(Integer.parseInt(fieldId.getText()), fieldNom.getText(), fieldDesc.getText(), Integer.parseInt(fieldCant.getText()), Integer.parseInt(fieldStock.getText()), queryIdCat(String.valueOf(selCat.getSelectionModel().getSelectedItem())), Double.parseDouble(fieldPvp.getText()), Double.parseDouble(fieldCost.getText()), Integer.parseInt(String.valueOf(10)), imagePath, checkCons.isSelected(), checkVendible.isSelected()));
+            closeWindow(btnCancel);
+        }
+
+    }
+
+    public void cancel(ActionEvent event) {
+        row = 0;
+        closeWindow(btnCancel);
+    }
+
+    public void addPhoto(ActionEvent event) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.setInitialDirectory(new File("C:\\Users\\acarb\\Documents\\2WIAM\\projecteFinal\\tpv\\src\\main\\resources\\com\\projecte\\tpv\\img"));
+        File file = fileChooser.showOpenDialog(new Stage());
+        if (file != null){
+            imagePath = file.toURI().toString();
+            image.setImage(new Image(imagePath));
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText("Please Select a File");
+            alert.showAndWait();
+        }
+    }
+
+    public void delPhoto(ActionEvent event) {
+        image.setImage(null);
+        imagePath = "img";
+    }
+}
