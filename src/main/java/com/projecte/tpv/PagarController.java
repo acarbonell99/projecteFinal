@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import org.bson.Document;
 
@@ -28,6 +29,7 @@ import java.util.ResourceBundle;
 
 import static com.projecte.tpv.DatabaseMongo.*;
 import static com.projecte.tpv.Generals.*;
+import static com.projecte.tpv.Keyboard.eq;
 import static com.projecte.tpv.VendaController.addTicket;
 import static com.projecte.tpv.VendaController.prodObsList;
 
@@ -40,6 +42,20 @@ public class PagarController implements Initializable {
     public VBox llilsta;
     @FXML
     public Button btnPagar;
+    public Button b1;
+    public Button b2;
+    public Button b0;
+    public Button b3;
+    public Button b4;
+    public Button b7;
+    public Button bComa;
+    public Button b6;
+    public Button b8;
+    public Button b5;
+    public Button b9;
+    public Button bAC;
+    public Button bC;
+    public Button bSumSub;
     private double importTotal = 0;
     public TextField total;
     public TextField entregat;
@@ -47,8 +63,11 @@ public class PagarController implements Initializable {
     String desc = "";
     static LocalDateTime data;
     public boolean div = false;
-    //public static DatabaseMongo dbMongo = new DatabaseMongo();
 
+    /**
+     * Fa la suma de cada Producte
+     * @param obs llista de Productes del tiquet
+     */
     public void calcularTotal(ObservableList<Producte> obs){
         importTotal = 0;
         if (obs.isEmpty()) obs = obsListFirts;
@@ -68,7 +87,26 @@ public class PagarController implements Initializable {
         /*entregat.setText(String.valueOf(2));
         int a = Integer.parseInt(entregat.getText());
         canvi.setText(String.valueOf(a+10));*/
+        Keyboard k = new Keyboard(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bSumSub);
+        System.out.println(k.clic());
 
+
+    }
+
+    /**
+     * Reinicia l'import entregat i el canvi a retornar
+     */
+    public void clear(){
+        entregat.clear();
+        canvi.clear();
+    }
+
+    /**
+     * Borrar import introduit
+     * @param event
+     */
+    public void borrarUltim(ActionEvent event) {
+        clear();
     }
 
     @Override
@@ -80,6 +118,10 @@ public class PagarController implements Initializable {
         calcularTotal(obsListFirts);
     }
 
+    /**
+     * Dividir compte per ralitzar diferents pagaments
+     * @param event
+     */
     public void dividir(ActionEvent event) {
         listPagar.setOnMouseClicked(f -> selItem(listPagar, llistaSeparada, obsListFirts, obsListSeparada));
         llistaSeparada.setOnMouseClicked(f -> selItem(llistaSeparada, listPagar, obsListSeparada, obsListFirts));
@@ -87,6 +129,14 @@ public class PagarController implements Initializable {
         div = true;
     }
 
+    /**
+     * Seleccionar un Producte per canviar-lo de llista.
+     * Funciona en ambdues direccions, un clic i es canvia el Producet de llista, nomes funciona de manera unitaria
+     * @param l1 listView inicial
+     * @param l2 listView final
+     * @param o1 llista inicial
+     * @param o2 llsita final
+     */
     public void selItem(ListView<Producte> l1, ListView<Producte> l2, ObservableList<Producte> o1, ObservableList<Producte> o2){
         int index = l1.getSelectionModel().getSelectedIndex();
         if (index >= 0){
@@ -99,30 +149,51 @@ public class PagarController implements Initializable {
             if (p.getCant() == 0) o1.remove(index);
             calcularTotal(obsListSeparada);
         }
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
     }
 
+    /**
+     * Selecciona el metode de pagament en efectiu
+     * Queda reflectit en el tiqquet
+     * @param event
+     */
     public void pagarEfectiu(ActionEvent event) {
         canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
-        desc = "Efectiu =\t" + df.format(Double.parseDouble(entregat.getText())) + "€\n" +
-                "Canvi =\t" + canvi.getText() + "€\n";
-
+        desc = "Efectiu =\t" + df.format(Double.parseDouble(entregat.getText())) + "€\n" + "Canvi =\t" + canvi.getText() + "€\n";
     }
 
+    /**
+     * Selecciona el metode de pagament en targeta
+     * Queda reflectit en el tiqquet
+     * @param event
+     */
     public void pagarTargeta(ActionEvent event) {
         desc = "Targeta =\t" + df.format(importTotal) + "€\n";
     }
 
+    /**
+     * Finalitza la venda
+     * Reinicia la observableList de Venda, queda per inicaiar una nova venda
+     * @param event
+     */
     public void pagar(ActionEvent event) {
         generarTicket();
-        prodObsList.clear();
-        if (obsListFirts.isEmpty()) div = false;
-        if (!div) closeWindow(btnPagar);
+        //prodObsList.clear();
+        if (obsListFirts.isEmpty()) {
+            div = false;
+            prodObsList.clear();
+        }
+        if (!div) {
+            prodObsList.clear();
+            closeWindow(btnPagar);
+        }
         obsListSeparada.clear();
-
+        clear();
     }
 
-
-
+    /**
+     * Imprimeix el tiquet per terminal (que seria el tique que s'imprimeix)
+     */
     public void generarTicket(){
         nextIdTicket2();
         data = LocalDateTime.now();
@@ -135,19 +206,14 @@ public class PagarController implements Initializable {
         System.out.println("\n" + desc + "\n");
         System.out.println("=".repeat(52));
         System.out.printf("%-40s%-10s\n\n", "Total: ", df.format(importTotal));
-        /*try {
-            dbMongo.connect();
-            crearTicket();
-        } catch (CannotConnectException e) {
-            e.printStackTrace();
-        }*/
         crearTicket();
         numTicket++;
         idticket++;
-
-        //crearTicket(obsListFirts, importTotal);
     }
 
+    /**
+     * Enregistra el tiquet a la base de dades
+     */
     public void crearTicket(){
         List<Document> pr = new ArrayList<>();
         for(Producte p: obsListFirts){
@@ -163,8 +229,61 @@ public class PagarController implements Initializable {
         doc.append("total", df.format(importTotal));
         doc.append("data", dtf.format(data));
         doc.append("treballdor", treballador);
-       collection.insertOne(doc);
+        collection.insertOne(doc);
     }
 
+    public void btn1(ActionEvent event) {
+        entregat.setText(entregat.getText() + b1.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn4(ActionEvent event) {
+        entregat.setText(entregat.getText() + b4.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn3(ActionEvent event) {
+        entregat.setText(entregat.getText() + b3.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn2(ActionEvent event) {
+        entregat.setText(entregat.getText() + b2.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn6(ActionEvent event) {
+        entregat.setText(entregat.getText() + b6.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn5(ActionEvent event) {
+        entregat.setText(entregat.getText() + b5.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn9(ActionEvent event) {
+        entregat.setText(entregat.getText() + b9.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn8(ActionEvent event) {
+        entregat.setText(entregat.getText() + b8.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn7(ActionEvent event) {
+        entregat.setText(entregat.getText() + b7.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btnComa(ActionEvent event) {
+        entregat.setText(entregat.getText() + ".");
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
+    public void btn0(ActionEvent event) {
+        entregat.setText(entregat.getText() + b0.getText());
+        canvi.setText(df.format(Double.parseDouble(entregat.getText())-importTotal));
+    }
 
+    /**
+     * Tanca la finestra de Pagar i retorna a Vanda per seguir afegint productes al tiquet
+     * @param event
+     */
+    public void addProduct(ActionEvent event) {
+        prodObsList.clear();
+        prodObsList.setAll(obsListFirts);
+        closeWindow(btnPagar);
+    }
 }

@@ -20,7 +20,8 @@ public class DatabaseSql {
     }
 
     /**
-     * @param t table name
+     * MEtode generic que a fer ocnsultes a la base de dades SQL
+     * @param t nom de la taula a consultar
      * @return  ResultSet All result to table s
      * @throws SQLException
      */
@@ -29,6 +30,11 @@ public class DatabaseSql {
         return resultSet;
     }
 
+    /**
+     * @return llista de treballadors
+     * @throws SQLException
+     * @deprecated no s'utilitza
+     */
     public List<Treballador> queryTreballadors() throws SQLException {
         List<Treballador> lt = new ArrayList<>();
         ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM treballador;");
@@ -38,6 +44,12 @@ public class DatabaseSql {
         return lt;
     }
 
+    /**
+     *
+     * @param s nom de la categoria
+     * @return id de l'ultim producte d'una categoria pasada per parametre
+     * @throws SQLException
+     */
     public static int queryWhereCat(String s) throws SQLException {
         ResultSet resultSet = conn.createStatement().executeQuery("SELECT id_prod FROM producte As pr JOIN categoria AS cat ON pr.id_cat = cat.id_cat where cat.nom = '" + s + "' ORDER BY id_prod DESC LIMIT 1;");
         while (resultSet.next()){
@@ -58,7 +70,7 @@ public class DatabaseSql {
 
     /**
      * @param w id_cat
-     * @return List all products where id_cat equal to w
+     * @return Llista de tots els producets que el seu id_cat es igual a w
      * @throws SQLException
      */
    public static List<Producte> queryProdXCat(String w) throws SQLException {
@@ -80,7 +92,7 @@ public class DatabaseSql {
 
     /**
      * @param w id producte
-     * @return Product where id equal w (only one product)
+     * @return Selecciona el Producte on id_prod es igual a w
      * @throws SQLException
      */
    public static Producte selProd(int w) throws SQLException {
@@ -92,8 +104,8 @@ public class DatabaseSql {
    }
 
     /**
-     * @param w categiry name
-     * @return  id_cat equals to w (nom)
+     * @param w nom de la categoria
+     * @return  id_cat igual a w (nom)
      * @throws SQLException
      */
    public static String queryIdCat(String w) throws SQLException {
@@ -105,8 +117,8 @@ public class DatabaseSql {
    }
 
     /**
-     * @param w category id
-     * @return  name equals to w (id_cat)
+     * @param w id de categoria
+     * @return  name igual a w (id_cat)
      * @throws SQLException
      */
    public static String queryNomCat(String w) throws SQLException {
@@ -119,7 +131,7 @@ public class DatabaseSql {
 
 
     /**
-     * @param p Product to insert
+     * @param p Producte a insertar a la abse de dades
      * @throws SQLException
      */
    public static void insertProd(Producte p) throws SQLException {
@@ -140,8 +152,10 @@ public class DatabaseSql {
    }
 
     /**
-     * @param p Product to update
+     * Actualitzar la informació d'un producte
+     * @param p Producte a actualitar a la base de dades
      * @throws SQLException
+     * @see FitxaController
      */
     public static void updateProd(Producte p) throws SQLException {
         PreparedStatement statement = conn.prepareStatement("UPDATE producte SET nom = ?, descripcio = ?, cant = ?, stock = ?, id_cat = ?, preu_venda = ?, preu_compra = ?, iva = ?, img = ?, consumible = ?, vendible = ? WHERE id_prod = ?;");
@@ -160,6 +174,12 @@ public class DatabaseSql {
         statement.executeUpdate();
     }
 
+    /**
+     * Actualitzar la categoria d'un producte
+     * @param s id de producte
+     * @param t id de categoria
+     * @throws SQLException
+     */
     public static void updateItem(int s, String t) throws SQLException {
         PreparedStatement statement = conn.prepareStatement("UPDATE producte SET id_cat = ? WHERE id_prod = ?;");
         statement.setString(1, t);
@@ -167,6 +187,12 @@ public class DatabaseSql {
         statement.executeUpdate();
     }
 
+    /**
+     * Actualitzar la quantitat de productes que tenim
+     * @param s id de producte
+     * @param t quantitat a actualitzar
+     * @throws SQLException
+     */
     public static void updateCant(int s, int t) throws SQLException {
         PreparedStatement statement = conn.prepareStatement("UPDATE producte SET cant = ? WHERE id_prod = ?;");
         statement.setInt(1, t);
@@ -174,11 +200,20 @@ public class DatabaseSql {
         statement.executeUpdate();
     }
 
+    /**
+     * Eliminar un producte
+     * @param id id de producte a eliminar
+     * @throws SQLException
+     */
     public void deleteProd(int id) throws SQLException {
         PreparedStatement statement = conn.prepareStatement("DELETE FROM producte WHERE id_prod = " + id + ";");
         statement.executeUpdate();
     }
 
+    /**
+     * Omplir la base de dades inicial
+     * @throws SQLException
+     */
     public void omplirDB() throws SQLException {
         PreparedStatement statement = conn.prepareStatement("INSERT INTO empresa VALUES\n" +
                 "\t('Grupo Serna', 'D12345678', 'SL', '+34', 943665514, 'www.gruposerna.com', 'Comandante Izarduy 46', 'Sant Joan Despí', 'Barcelona', 08970);");

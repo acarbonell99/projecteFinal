@@ -19,13 +19,11 @@
                      <String fx:value="btn-sm" />
                  </styleClass>
              </Button>
-            <Label layoutX="100.0" layoutY="7.0" text="Label" AnchorPane.leftAnchor="100.0" />
-            <StackPane alignment="CENTER_RIGHT" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <TextField />
-                  <Button mnemonicParsing="false" prefWidth="39.0" text="Button" />
-               </children>
-            </StackPane>
+             <Label layoutX="100.0" layoutY="7.0" styleClass="h4" text="Recompte">
+                 <padding>
+                     <Insets left="16.0" />
+                 </padding>
+             </Label>
          </children>
       </AnchorPane>
       <GridPane hgap="8.0" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0">
@@ -115,7 +113,7 @@
             <TextField fx:id="pdv" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="2" />
             <TextField fx:id="tpv" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="3" />
             <TextField fx:id="caixer" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-            <TextField fx:id="numZ" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+            <TextField fx:id="numZfield" GridPane.columnIndex="6" GridPane.rowIndex="5" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Punt de venda" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Num. caixa" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />

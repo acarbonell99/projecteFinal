@@ -26,7 +26,6 @@ import static com.projecte.tpv.ProducteController.row;
 import static com.projecte.tpv.model.Producte.nextId;
 
 public class FitxaController implements Initializable {
-
     @FXML
     public Button btnCancel;
     public Button btnSave;
@@ -34,10 +33,7 @@ public class FitxaController implements Initializable {
     public Button btnAddPhoto;
     public Button btnDelPhoto;
     String cat = "";
-
     String imagePath = "img";
-
-
     public ChoiceBox selCat;
     public TextField fieldId;
     public TextField fieldNom;
@@ -49,7 +45,11 @@ public class FitxaController implements Initializable {
     public TextField fieldStock;
     public TextField fieldCant;
 
-
+    /**
+     * Crea una List amb el nom de totes les categories
+     * Omple el ChoiseBox per seleccionar una categoria
+     * @throws SQLException
+     */
     public void choiseCat() throws SQLException {
         List<String> cat = new ArrayList<>();
         ResultSet resultSet = gueryGeneric("categoria");
@@ -60,6 +60,11 @@ public class FitxaController implements Initializable {
 
     }
 
+    /**
+     * Si row==0 la fitxa tecnica estarà en blanc, en cas contrari, cridda al metode ompirFitxa(Producte) per omplir la fitxaamb les dades del producte sel·leccionat
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (row != 0){
@@ -69,8 +74,6 @@ public class FitxaController implements Initializable {
                 e.printStackTrace();
             }
         }
-
-
         try {
             choiseCat();
         } catch (SQLException e) {
@@ -85,6 +88,11 @@ public class FitxaController implements Initializable {
         });
     }
 
+    /**
+     * Recupera les dades del Producte passat per parametre
+     * @param p Producte sel·leccionat
+     * @throws SQLException
+     */
     public void ompirFitxa(Producte p) throws SQLException {
         btnSave.setText("Edit");
         active(true);
@@ -103,6 +111,10 @@ public class FitxaController implements Initializable {
         if (!p.getImg().equals("img")) image.setImage(new Image(p.getImg()));
     }
 
+    /**
+     * Comprova si la fitxa es editable o no
+     * @param b
+     */
     public void active(boolean b){
         fieldNom.setDisable(b);
         fieldDesc.setDisable(b);
@@ -116,10 +128,14 @@ public class FitxaController implements Initializable {
         btnDelPhoto.setDisable(b);
         if (b) btnSave.setText("Edit");
         else btnSave.setText("Save");
-
     }
 
-
+    /**
+     * Si s'estacreant un Producte nou, s'inserteix a la base de dades
+     * Si d'està actualitzant un Producte, l'actualitza a la base de dades
+     * @param event
+     * @throws SQLException
+     */
     public void save(ActionEvent event) throws SQLException {
         if (btnSave.getText().equals("Edit")){
             active(false);
@@ -130,14 +146,23 @@ public class FitxaController implements Initializable {
             insertProd(new Producte(Integer.parseInt(fieldId.getText()), fieldNom.getText(), fieldDesc.getText(), Integer.parseInt(fieldCant.getText()), Integer.parseInt(fieldStock.getText()), queryIdCat(String.valueOf(selCat.getSelectionModel().getSelectedItem())), Double.parseDouble(fieldPvp.getText()), Double.parseDouble(fieldCost.getText()), Integer.parseInt(String.valueOf(10)), imagePath, checkCons.isSelected(), checkVendible.isSelected()));
             closeWindow(btnCancel);
         }
-
     }
 
+    /**
+     * Tanca la finastra de Fitxa tecnica sense gardad res
+     * @param event
+     */
     public void cancel(ActionEvent event) {
         row = 0;
         closeWindow(btnCancel);
     }
 
+    /**
+     * Afegeix o actualitza la foto de Producte
+     * Obre el selector d'imatges que permet navegar i sel·leccionar-la
+     * @param event
+     * @throws IOException
+     */
     public void addPhoto(ActionEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -154,6 +179,10 @@ public class FitxaController implements Initializable {
         }
     }
 
+    /**
+     * Elimina la imatge del Producte
+     * @param event
+     */
     public void delPhoto(ActionEvent event) {
         image.setImage(null);
         imagePath = "img";

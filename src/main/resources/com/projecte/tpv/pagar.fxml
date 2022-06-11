@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.tpv.PagarController">
+<HBox stylesheets="@css/estils.css"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.tpv.PagarController">
    <children>
       <GridPane hgap="8.0" vgap="8.0">
         <columnConstraints>
@@ -55,9 +55,21 @@
                   <Font name="Calibri" size="18.0" />
                </font>
             </TextField>
-            <Button fx:id="efectiu" mnemonicParsing="false" onAction="#pagarEfectiu" prefHeight="50.0" prefWidth="100.0" text="Efectiu" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Button fx:id="targeta" mnemonicParsing="false" onAction="#pagarTargeta" prefHeight="50.0" prefWidth="100.0" text="Targeta" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Button fx:id="btnPagar" mnemonicParsing="false" onAction="#pagar" prefHeight="50.0" prefWidth="208.0" styleClass="pay" text="Pagar" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+            <Button fx:id="efectiu" mnemonicParsing="false" onAction="#pagarEfectiu" prefHeight="50.0" prefWidth="100.0" text="Efectiu" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="targeta" mnemonicParsing="false" onAction="#pagarTargeta" prefHeight="50.0" prefWidth="100.0" text="Targeta" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="btnPagar" mnemonicParsing="false" onAction="#pagar" prefHeight="50.0" prefWidth="208.0" text="Pagar" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
          </children>
       </GridPane>
       <VBox fx:id="llilsta" prefHeight="200.0" prefWidth="200.0">
@@ -82,21 +94,85 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="7" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="8" GridPane.columnIndex="1" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="9" GridPane.columnIndex="2" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="4" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="6" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="1" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="3" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="," GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="C" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" onAction="#dividir" prefHeight="60.0" prefWidth="75.0" text="Dividir" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="," GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="/" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Button fx:id="b7" mnemonicParsing="false" onAction="#btn7" prefHeight="60.0" prefWidth="75.0" text="7">
+               <GridPane.margin>
+                <Insets />
+            </GridPane.margin>
+                <styleClass>
+                    <String fx:value="btn-info" />
+                    <String fx:value="btn1" />
+                </styleClass>
+            </Button>
+            <Button fx:id="b8" mnemonicParsing="false" onAction="#btn8" prefHeight="60.0" prefWidth="75.0" text="8" GridPane.columnIndex="1">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="b9" mnemonicParsing="false" onAction="#btn9" prefHeight="60.0" prefWidth="75.0" text="9" GridPane.columnIndex="2">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="b4" mnemonicParsing="false" onAction="#btn4" prefHeight="60.0" prefWidth="75.0" text="4" GridPane.rowIndex="1">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="b5" mnemonicParsing="false" onAction="#btn5" prefHeight="60.0" prefWidth="75.0" text="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="b6" mnemonicParsing="false" onAction="#btn6" prefHeight="60.0" prefWidth="75.0" text="6" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="b1" mnemonicParsing="false" onAction="#btn1" prefHeight="60.0" prefWidth="75.0" text="1" GridPane.rowIndex="2">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="b2" mnemonicParsing="false" onAction="#btn2" prefHeight="60.0" prefWidth="75.0" text="2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="b3" mnemonicParsing="false" onAction="#btn3" prefHeight="60.0" prefWidth="75.0" text="3" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="bComa" mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="," GridPane.rowIndex="3">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="b0" mnemonicParsing="false" onAction="#btn0" prefHeight="60.0" prefWidth="75.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="bC" mnemonicParsing="false" onAction="#borrarUltim" prefHeight="60.0" prefWidth="75.0" text="C" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button fx:id="bDividir" mnemonicParsing="false" onAction="#dividir" prefHeight="60.0" prefWidth="75.0" text="Dividir" GridPane.rowIndex="4">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="75.0" text="," GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
+            <Button mnemonicParsing="false" onAction="#addProduct" prefHeight="60.0" prefWidth="75.0" text="Add product" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <styleClass>
+                  <String fx:value="btn-info" />
+                  <String fx:value="btn1" />
+               </styleClass></Button>
          </children>
          <HBox.margin>
             <Insets />

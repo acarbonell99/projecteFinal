@@ -23,7 +23,6 @@ import static com.projecte.tpv.Generals.openWindow;
 import static com.projecte.tpv.HelloApplication.st;
 
 public class PersonalController implements Initializable {
-
     public static ObservableList<Treballador> trebOl = FXCollections.observableArrayList();
     public TableView<Treballador> table;
 
@@ -44,10 +43,19 @@ public class PersonalController implements Initializable {
         table.getColumns().addAll(colCarrec, colNom, colDni);
     }
 
+    /**
+     * Tornar a la finestra anterior
+     * @param event
+     */
     public void back(ActionEvent event) {
         openWindow("prevenda.fxml", "Prevenda", true, table.getScene());
     }
 
+    /**
+     * Emplena la taula de Treballadors
+     * @throws SQLException
+     * @deprecated no esta desenvolupat
+     */
     public void listTreballador() throws SQLException {
         ResultSet rs = gueryGeneric("treballador");
         while (rs.next()){

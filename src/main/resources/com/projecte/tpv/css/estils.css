@@ -30,3 +30,17 @@
 .teclat>Button{
     -fx-border-style: none;
 }
+
+.tabPaneProd {
+-fx-background-color: grey;
+    -fx-background-radius: 16;
+}
+
+.tabProd{
+    -fx-background-color: blue;
+    -fx-background-radius: 8 8 0 0;
+    //-fx-padding: 8 16;
+}
+.tabProd:active {
+-fx-background-color: red;
+}

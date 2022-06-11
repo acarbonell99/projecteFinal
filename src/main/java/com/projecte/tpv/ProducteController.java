@@ -30,15 +30,32 @@ public class ProducteController implements Initializable {
     public TabPane tabPane;
     public static boolean exist = false;
     public static int row = 0;
+    TableView<Producte> table;
+
+    /**
+     * Tornar a la finestra anterior
+     * @param event
+     */
     public void back(ActionEvent event) {
         openWindow("prevenda.fxml", "Prevenda", true, tabPane.getScene());
     }
 
+    /**
+     * Obre la fitxa tecnica en blanc per afegir un nou producte
+     * row = 0 -> Nou producte
+     * row != 0 -> veure un producte existent
+     * @param event
+     */
     public void addProduct(ActionEvent event) {
         row = 0;
         openWindow("fitxaTecnica.fxml", "Fitxa Tecnica");
     }
 
+    /**
+     * Crea una taula en cada tab amb els Productes de la categoria
+     * @param newTab
+     * @return
+     */
     public TableView<Producte> addTable(Tab newTab){
         TableView<Producte> table = new TableView();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -67,7 +84,6 @@ public class ProducteController implements Initializable {
         colVendible.setCellFactory( tc -> new CheckBoxTableCell<>());
         table.setItems(producteObservableList);
         table.getColumns().addAll(colId, colNom, colDesc, colPreu, colCat, colConsumible, colVendible);
-
         table.getSelectionModel().selectedItemProperty().addListener(e ->{
             row = table.getSelectionModel().getSelectedItem().getId_prod();
             openWindow("fitxaTecnica.fxml", "Fitxa Tecnica");
@@ -75,7 +91,11 @@ public class ProducteController implements Initializable {
         return table;
     }
 
-    TableView<Producte> table;
+
+    /**
+     * Crea els Tabs del panel utilitzant les categories de la base de dades
+     * @throws SQLException
+     */
     public void tabs() throws SQLException {
         List<Categoria> cat = selCat();
         for (int i = 0; i < cat.size(); i++){
@@ -88,7 +108,11 @@ public class ProducteController implements Initializable {
     }
 
 
-
+    /**
+     * Inicialitza les pestanyes
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {

@@ -18,13 +18,11 @@
                    <String fx:value="btn-sm" />
                 </styleClass>
              </Button>
-            <Label layoutX="100.0" layoutY="7.0" text="Label" textAlignment="CENTER" AnchorPane.leftAnchor="100.0" />
-            <StackPane alignment="CENTER_RIGHT" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <TextField />
-                  <Button mnemonicParsing="false" prefWidth="39.0" text="Button" />
-               </children>
-            </StackPane>
+            <Label layoutX="100.0" layoutY="7.0" styleClass="h4" text="Stock">
+               <padding>
+                  <Insets left="16.0" />
+               </padding>
+            </Label>
          </children>
       </AnchorPane>
        <TabPane fx:id="tabPane" layoutX="16.0" layoutY="72.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0" />

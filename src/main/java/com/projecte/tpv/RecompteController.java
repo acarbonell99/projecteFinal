@@ -16,7 +16,7 @@ public class RecompteController implements Initializable {
     public TextField b5, b10, b20, b50, b100,b200, b500;
     public TextField m001, m002, m005, m01, m02, m05, m1, m2;
     public TextField bTotal, mTotal, bm, canvi, totalEfectiu, targeta, totalProd, totalZ;
-    public TextField date, pdv, tpv, caixer, numZ;
+    public TextField date, pdv, tpv, caixer, numZfield;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -24,12 +24,21 @@ public class RecompteController implements Initializable {
         tpv.setText(tpvCode);
         caixer.setText(treballador);
         date.setText(dateInicial);
-        numZ.setText(String.valueOf(numZ));
+        numZfield.setText(String.valueOf(numZ));
     }
 
+    /**
+     * Torna a al finestra anterior
+     * @param event
+     */
     public void back(ActionEvent event) {
         openWindow("postvenda.fxml", "Postvenda", true, b5.getScene());
     }
+
+    /**
+     * Genera un document amb el resum de contabilitat de la venda finalitzada
+     * @param event
+     */
     public void enviarRecompte(ActionEvent event) {
         totalEfectiu();
         Map<String, Integer> bitllets = new HashMap<>();
@@ -55,7 +64,7 @@ public class RecompteController implements Initializable {
         doc.append("id_tpv", tpv.getText());
         doc.append("data", date.getText());
         doc.append("caixer", caixer.getText());
-        doc.append("numZ", numZ.getText());
+        doc.append("numZ", numZfield.getText());
         doc.append("bitllets", bitllets);
         doc.append("monedes", monedes);
         doc.append("total bitllets", bTotal.getText());
@@ -69,6 +78,10 @@ public class RecompteController implements Initializable {
         doc.append("diferencia", Double.parseDouble(totalZ.getText())-Double.parseDouble(totalProd.getText()));
         collection.insertOne(doc);
     }
+
+    /**
+     * Fa els calculs de diners introduits
+     */
     public void totalEfectiu(){
         bTotal.setText(String.valueOf(Integer.parseInt(b500.getText())*500 + Integer.parseInt(b200.getText())*200 + Integer.parseInt(b100.getText())*100 + Integer.parseInt(b50.getText())*50 + Integer.parseInt(b20.getText())*20 + Integer.parseInt(b10.getText())*10 + Integer.parseInt(b5.getText())*5));
         mTotal.setText(String.valueOf(Double.parseDouble(m2.getText())*2 + Double.parseDouble(m1.getText())*1 + Double.parseDouble(m05.getText())*0.5 + Double.parseDouble(m02.getText())*0.2 + Double.parseDouble(m01.getText())*0.1 + Double.parseDouble(m005.getText())*0.05 + Double.parseDouble(m002.getText())*0.02 + Double.parseDouble(m001.getText())*0.01));

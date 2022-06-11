@@ -19,13 +19,11 @@
                   <String fx:value="btn-sm" />
                </styleClass>
             </Button>
-            <Label layoutX="100.0" layoutY="7.0" text="Label" AnchorPane.leftAnchor="100.0" />
-            <StackPane alignment="CENTER_RIGHT" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <TextField />
-                  <Button mnemonicParsing="false" prefWidth="39.0" text="Button" />
-               </children>
-            </StackPane>
+            <Label layoutX="100.0" layoutY="7.0" styleClass="h4" text="Neteja">
+               <padding>
+                  <Insets left="16.0" />
+               </padding>
+            </Label>
          </children>
       </AnchorPane>
       <TableView fx:id="table" layoutX="16.0" layoutY="69.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="262.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0">

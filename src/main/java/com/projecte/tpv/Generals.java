@@ -30,22 +30,34 @@ public class Generals {
     static String dateInicial = "";
     static String dateFinal = "";
     static int numZ = 0;
-
     static DecimalFormat df = new DecimalFormat("#0.00");
     static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
+    /**
+     * Obrir una finsetra en un Stage diferent
+     * @param field arxiu .fxml
+     * @param title nom finestra
+     * @param t naximizar finestra
+     * @param scene scena
+     */
     public static void openWindow(String field, String title, boolean t, Scene scene){
         try {
-            Parent root2 = new FXMLLoader(HelloController.class.getResource(field)).load();
+            Parent root2 = new FXMLLoader(IniciController.class.getResource(field)).load();
             scene.setRoot(root2);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Obrir una finestra en el mateix Stage
+     * @param field arxiu .fxml
+     * @param title nom finestra
+     */
     public static void openWindow(String field, String title){
         try {
             Stage st = new Stage();
-            Scene scene = new Scene(new FXMLLoader(HelloController.class.getResource(field)).load());
+            Scene scene = new Scene(new FXMLLoader(IniciController.class.getResource(field)).load());
             scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
             st.setScene(scene);
             st.setTitle(title);
@@ -56,11 +68,18 @@ public class Generals {
         }
     }
 
+    /**
+     * Metode generic per tancar  una finestra
+     * @param btn serveix per identificar en quina escena s'està
+     */
     public static void closeWindow(Button btn){
         Stage st = (Stage) btn.getScene().getWindow();
         st.close();
     }
 
+    /**
+     * @return llista de categories
+     */
     public static List<Categoria> selCat(){
         List<Categoria> cat = new ArrayList<>();
         try {
@@ -74,6 +93,9 @@ public class Generals {
         return cat;
     }
 
+    /**
+     * @return llsiat de productes
+     */
     public static List<Producte> selAllProd(){
         List<Producte> prd = new ArrayList<>();
         try {

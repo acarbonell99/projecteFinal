@@ -28,22 +28,20 @@ public class DatabaseMongo {
     public static MongoDatabase database;
     public static MongoCollection<Document> collection;
 
+    /**
+     * Conectar a la base de dades de MongoDB
+     * @throws CannotConnectException
+     */
     public void connect() throws CannotConnectException {
-        /*String uri = "mongodb://localhost";
-        try (MongoClient mongoClient = MongoClients.create(uri)) {
-            database = mongoClient.getDatabase("projecteTpv");
-        }*/
         try{
             MongoClient mongoClient = MongoClients.create(uri);
             database = mongoClient.getDatabase("projecteTpv");
         } catch (Exception e) {
             throw new CannotConnectException();
         }
-
-
     }
 
-    public void omplir(){
+    /*public void omplir(){
         List<Document> tr = new ArrayList<>();
         tr.add(new Document().append("dni", "22934885K").append("id_rol", "r00004"));
         tr.add(new Document().append("dni", "95631282L").append("id_rol", "r00005"));
@@ -59,26 +57,31 @@ public class DatabaseMongo {
         doc.append("personal", tr);
         doc.append("tpv", tpv);
         collection.insertOne(doc);
-    }
+    }*/
 
+    /**
+     * Crea el tiquet d'una venda (Es genera uqna es finalitza la venda)
+     * @param obs llista de productes venuts
+     * @param total suma total dels producte svenuts
+     */
     public void crearTicket(ObservableList<Producte> obs, double total){
         List<Document> pr = new ArrayList<>();
-        for(Producte p: obs){
-            pr.add(new Document().append("id_prod", p.getId_prod()).append("nom", p.getNom()).append("cant", p.getCant()).append("preu", p.getPreu_venda()));
-        }
+        for(Producte p: obs) pr.add(new Document().append("id_prod", p.getId_prod()).append("nom", p.getNom()).append("cant", p.getCant()).append("preu", p.getPreu_venda()));
         collection = database.getCollection("ticket");
-        Document doc = new Document();
-        doc.append("id_ticket", idticket);
-        doc.append("num_ticket", numTicket);
-        doc.append("productes", pr);
-        doc.append("IVA", total/10);
-        doc.append("total-iva", total-(total/10));
-        doc.append("total", total);
-        doc.append("data", dtf.format(data));
-        doc.append("treballdor", treballador);
-        collection.insertOne(doc);
+        collection.insertOne(new Document()
+                .append("id_ticket", idticket)
+                .append("num_ticket", numTicket)
+                .append("productes", pr)
+                .append("IVA", total/10)
+                .append("total-iva", total-(total/10))
+                .append("total", total)
+                .append("data", dtf.format(data))
+                .append("treballdor", treballador));
     }
 
+    /**
+     * Finalitzar l'activitat de venda
+     */
     public static void operacionZ(){
         numZ = nextZ();
         collection = database.getCollection("ticket");
@@ -100,12 +103,20 @@ public class DatabaseMongo {
                 .append("tickets", docs));
     }
 
+    /**
+     * Calcula el numero de Z següent
+     * @return numero de Z següent
+     */
     public static int nextZ(){
         collection = database.getCollection("recopilacio");
         if (collection.find().sort(descending("numZ")).first() == null) return 1;
         return collection.find().sort(descending("numZ")).first().getInteger("numZ")+1;
     }
 
+    /**
+     * Calcula el numero de tiquet següent
+     * @return numero de tiquet següent
+     */
     public static int nextIdTicket(){
         collection = database.getCollection("ticket");
         if (collection.find().sort(descending("id_ticket")).first() == null) return 1;
@@ -121,23 +132,17 @@ public class DatabaseMongo {
             doc.forEach(d -> idticket = Math.max(idticket, d.getInteger("id_ticket")));
         }
     }
-    /*public static void prova(){
-        collection = database.getCollection("recopilacio");
-        ArrayList<Document> doc = (ArrayList<Document>) collection.find().sort(descending("numZ")).first().get("tickets");
-        doc.forEach(d -> System.out.println(d.getInteger("id_ticket") + " -- " + d));
-        int a = 0;
-        for (Document d : doc){
-            System.out.println(a + " -- " + d.getInteger("id_ticket"));
-            a = Math.max(a, d.getInteger("id_ticket"));
-        }
 
-    }*/
     static ArrayList<Producte> prdStock = new ArrayList<>();
+
+    /**
+     * Realitza el calcul de l'estoc que hi hauria d'haver sogons el que 'sha venut.
+     * Es resta la quantitat de cada producte venut i es resta al estoc guardat a la base de dades
+     */
     public static void stockGastat(){
         ArrayList<Document> d = new ArrayList<>();
         ArrayList<Document> d2 = new ArrayList<>();
         ArrayList<Producte> p = new ArrayList<>();
-
         collection = database.getCollection("ticket");
         collection.find(Filters.empty())
                 .projection(fields(include("productes.id_prod", "productes.cant"), exclude("_id")))
@@ -152,15 +157,16 @@ public class DatabaseMongo {
         prdStock.forEach(q -> comandaProductes(q.getId_prod(), q.getCant()));
     }
 
+    /**
+     * @param id id del producte
+     * @param cant quantitat del producte a demanar
+     */
     public static void comandaProductes(int id, int cant){
         collection = database.getCollection("comanda");
-        Document doc = new Document();
-        doc.append("id_comanda", 1);
-        doc.append("data", dtf.format(LocalDateTime.now()));
-        doc.append("id_prod", id);
-        doc.append("quantitat", cant);
-        collection.insertOne(doc);
-
+        collection.insertOne(new Document()
+                .append("id_comanda", 1)
+                .append("data", dtf.format(LocalDateTime.now()))
+                .append("id_prod", id)
+                .append("quantitat", cant));
     }
-
 }

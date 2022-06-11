@@ -29,11 +29,18 @@ public class NetejaController implements Initializable {
     public TableView table;
     public TableColumn colTasca;
 
+    /**
+     * Tornar a la finestra anterior
+     * @param event
+     */
     public void back(ActionEvent event) {
         openWindow("postvenda.fxml", "Postvenda", true, table.getScene());
     }
 
 
+    /**
+     * Ompla la taula amb les tasques de neteja
+     */
     public void omplirNeteja(){
         List<Neteja> neteja = new ArrayList<>();
         neteja.add(new Neteja("Neteja de les neveres i congeladors"));

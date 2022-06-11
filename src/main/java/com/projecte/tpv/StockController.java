@@ -35,6 +35,8 @@ public class StockController implements Initializable {
     public TabPane tabPane;
     public static boolean exist = false;
     public static int row = 0;
+    TableView<Producte> table;
+    static Producte prdComanda;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -45,13 +47,23 @@ public class StockController implements Initializable {
         }
     }
 
+    /**
+     * Torna a la finestra anterior
+     * @param event
+     */
     public void back(ActionEvent event) {
         openWindow("postvenda.fxml", "Postvenda", true, tabPane.getScene());
     }
+
+    /**
+     * Envia les dades recollides en el control d'estoc a la base de dades
+     * Si s'ha introduit manualment "esctoc real" es garda en nombre introduir en aquell producte, en cas contrari, es guarda el nombre de " estoc esperat"
+     * @param event
+     */
     public void sendStcok(ActionEvent event) {
         producteObservableList.forEach(p -> {
             try {
-                if (p.getStockReal().equals(null) || p.getStockReal().equals("")) updateCant(p.getId_prod(), p.getCant());
+                if (p.getStockReal().equals("")) updateCant(p.getId_prod(), p.getCant());
                 else updateCant(p.getId_prod(), Integer.parseInt(p.getStockReal()));
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -59,6 +71,11 @@ public class StockController implements Initializable {
         });
     }
 
+    /**
+     * Crea una taula en cada tab amb els Productes de la categoria
+     * @param newTab
+     * @return
+     */
     public TableView<Producte> addTable(Tab newTab){
         TableView<Producte> table = new TableView();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -73,8 +90,6 @@ public class StockController implements Initializable {
             if (p.equals(p2)) p2.setCant(p2.getCant()-p.getCant());
             if (p2.getCant() < p2.getStockMin()) p2.setEstat(true);
         }));
-
-
         TableColumn colId = new TableColumn("Id");
         colId.setCellValueFactory(
                 new PropertyValueFactory("id_prod"));
@@ -87,34 +102,25 @@ public class StockController implements Initializable {
         TableColumn colCat = new TableColumn("Categoria");
         colCat.setCellValueFactory(
                 new PropertyValueFactory("id_cat"));
-
         TableColumn colStockEsperat = new TableColumn("Stock esperat");
         colStockEsperat.setCellValueFactory(
                 new PropertyValueFactory("cant"));
         TableColumn colStockMinim = new TableColumn("Stock minim");
         colStockMinim.setCellValueFactory(
                 new PropertyValueFactory("stockMin"));
-
-        /*TableColumn colPreu = new TableColumn("Preu");
-        colPreu.setCellValueFactory(
-                new PropertyValueFactory("preu_venda"));*/
-        /*TableColumn<Producte, Boolean> colConsumible = new TableColumn("Consumible");
-        colConsumible.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().isConsumible()));
-        colConsumible.setCellFactory( tc -> new CheckBoxTableCell<>());
-        TableColumn<Producte, Boolean> colVendible = new TableColumn("Vendible");
-        colVendible.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().isVendible()));
-        colVendible.setCellFactory( tc -> new CheckBoxTableCell<>());*/
         TableColumn colStockReal = new TableColumn("Stock real");
         colStockReal.setCellValueFactory(
                 new PropertyValueFactory("stockReal"));
         colStockReal.setCellFactory((TextFieldTableCell.forTableColumn()));
         colStockReal.setEditable(true);
-        TableColumn colEstat = new TableColumn("Estat");
-        colEstat.setCellValueFactory(
-                new PropertyValueFactory("estat"));
-        TableColumn colComanda = new TableColumn("Comanda");
-        colComanda.setCellValueFactory(
-                new PropertyValueFactory("comanda"));
+        TableColumn<Producte, Boolean> colEstat = new TableColumn("Estat");
+        colEstat.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().isEstat()));
+        colEstat.setCellFactory( tc -> new CheckBoxTableCell<>());
+        colEstat.setEditable(false);
+        TableColumn<Producte, Boolean> colComanda = new TableColumn("Comanda");
+        colComanda.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().isComanda()));
+        colComanda.setCellFactory( tc -> new CheckBoxTableCell<>());
+        colComanda.setEditable(false);
         colStockReal.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Producte, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Producte, String> t) {
@@ -128,32 +134,36 @@ public class StockController implements Initializable {
                 }
             }
         });
-
-
-
-        //colComanda.setCellFactory(CheckBoxTableCell.forTableColumn(colComanda));
         refresh(table);
-        //table.setItems(producteObservableList);
         table.getColumns().addAll(colId, colNom, colDesc, colCat, colStockEsperat, colStockReal, colStockMinim, colEstat, colComanda);
         table.setEditable(true);
-
         table.getSelectionModel().selectedItemProperty().addListener(e -> {
             prdComanda = table.getSelectionModel().getSelectedItem();
-            if (prdComanda.isEstat()) openWindow("demandaStock.fxml", "Comanda");
+            if (prdComanda.isEstat()) {
+                openWindow("demandaStock.fxml", "Comanda");
+                prdComanda.setComanda(true);
+                table.getColumns().remove(colComanda);
+                refresh(table);
+                table.getColumns().add(8, colComanda);
+            }
         });
-
-        /*table.getSelectionModel().selectedItemProperty().addListener(e ->{
-            row = table.getSelectionModel().getSelectedItem().getId_prod();
-            openWindow("fitxaTecnica.fxml", "Fitxa Tecnica");
-        });*/
         return table;
     }
-    static Producte prdComanda;
+
+    /**
+     * Refresca els productes de la ObservableList que es volcan en la taula
+     * @param tab
+     */
     public void refresh(TableView<Producte> tab){
         tab.setItems(producteObservableList);
     }
 
-    TableView<Producte> table;
+
+
+    /**
+     * Crea els Tabs del panel utilitzant les categories de la base de dades
+     * @throws SQLException
+     */
     public void tabs() throws SQLException {
         List<Categoria> cat = selCat();
         for (int i = 0; i < cat.size(); i++){

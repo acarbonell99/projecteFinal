@@ -31,7 +31,7 @@ import static com.projecte.tpv.DatabaseMongo.operacionZ;
 import static com.projecte.tpv.DatabaseMongo.stockGastat;
 import static com.projecte.tpv.DatabaseSql.queryProdXCat;
 import static com.projecte.tpv.Generals.*;
-//import static com.projecte.tpv.Keyboard.*;
+import static com.projecte.tpv.Keyboard.*;
 
 public class VendaController implements Initializable {
     public static ObservableList<Producte> prodObsList = FXCollections.observableArrayList();
@@ -42,50 +42,32 @@ public class VendaController implements Initializable {
     public Label itemPreu;
     public Label itemDesc;
     public Label itemTotal;
-    @FXML
-    public Button bMenys;
-    @FXML
     public Button b1;
-    @FXML
     public Button b2;
-    @FXML
     public Button b0;
-    @FXML
-    public Button bSuma1;
-    @FXML
-    public Button bMult;
-    @FXML
+    public Button bNouClient;
     public Button bBorrar;
-    @FXML
     public Button b3;
-    @FXML
     public Button b4;
-    @FXML
     public Button b7;
-    @FXML
     public Button bComa;
-    @FXML
     public Button b6;
-    @FXML
     public Button b8;
-    @FXML
     public Button b5;
-    @FXML
     public Button b9;
-    static int num = 1;
+    public Button bAC;
+    public Button bC;
+    public Button bSumSub;
     private boolean aparcat = false;
+    static int num = 1;
 
     @FXML
     public Button btnAparcar;
     @FXML
     public VBox menuLateral;
-    //Keyboard k = new Keyboard(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bMenys, bBorrar, bMult, bComa, bSuma1);
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-       // k.clic();
-        //System.out.println(eq);
-        //System.out.println(k.clic());
         menuLateral();
         try {
             gridCentral("null");
@@ -109,15 +91,35 @@ public class VendaController implements Initializable {
         });
     }
 
+    /**
+     * Torna a la pantalla d'Inici
+     * @param event
+     */
     public void backInici(ActionEvent event) {
         openWindow("inici.fxml", "Inici", true, btnAparcar.getScene());
     }
+
+    /**
+     * Navega a la finestra de Pagar
+     * @param event
+     */
     public void toPay(ActionEvent event) {
         openWindow("pagar.fxml", "Pagar");
     }
+
+    /**
+     * Reinicia la llsita que conte els Prductes
+     * @param event
+     */
     public void nouClient(ActionEvent event) {
         prodObsList.clear();
     }
+
+    /**
+     * Guarda els Productes del tiquet en un llista temporal ineteja la llista pricipal per poder iniciar una venda nova
+     * Si ja hi ha una llsiat guardada la deixa anar i col·loca els seus elements en la llista principal sobreescribint els Productes previs
+     * @param event
+     */
     public void parcar(ActionEvent event) {
         if (!aparcat){
             btnAparcar.setText("Deixar ticket");
@@ -133,6 +135,13 @@ public class VendaController implements Initializable {
             aparcat = false;
         }
     }
+
+    /**
+     * Finalitza la venda i recull els tiquets generats durant aquesta venda  en un sol document
+     * Tanca la Finestra de Venda i obre la d'Inici
+     * Venda queda bloquejat fins a inicialitzar una altra vegada la TPV i Postvenda queda desbloquejat
+     * @param event
+     */
     public void opZ(ActionEvent event) {
         dateFinal = dtf.format(LocalDateTime.now());
         stockGastat();
@@ -141,6 +150,10 @@ public class VendaController implements Initializable {
         openWindow("inici.fxml", "Inici", true, btnAparcar.getScene());
         operacionZ();
     }
+
+    /**
+     * Crea automaticament el menu lateral utilitzant les categories de la base de dades
+     */
     public void menuLateral(){
         List<Categoria> cat = selCat();
         Button btAll = new Button("Tot");
@@ -176,18 +189,24 @@ public class VendaController implements Initializable {
             });
         });
     }
+
+    /**
+     * Omple el grid ccentral amb tots els productes de la bse de dades
+     * Per defecte es mostren tots els productes, en sel·leccionar una categoria nomes es mostren els productes d'aquella categoria
+     * En clicar un Producte s'afegeix al tiquet
+     * @param s
+     * @throws SQLException
+     */
     public void gridCentral(String s) throws SQLException {
+        Keyboard k = new Keyboard(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bSumSub);
         gridProduct.getChildren().clear();
         List<Producte> prd = queryProdXCat(s);
-        int c = 0;
-        int r = 0;
+        int c = 0, r = 0;
         for (Producte producte : prd) {
             VBox box = new VBox();
             box.setId("prodBox");
             box.getStyleClass().setAll("btn", "btn-default", "btn2", "prodcutsBox");
             box.setPrefWidth(100);
-            //box.setPadding(new Insets(4));
-            //box.setAlignment(Pos.CENTER);
             ImageView img = new ImageView();
             img.setId("prodImg");
             img = (producte.getImg().equals("img")) ? new ImageView(new Image(VendaController.class.getResourceAsStream("img/imgFail.png"))) : new ImageView(new Image(producte.getImg()));
@@ -204,8 +223,6 @@ public class VendaController implements Initializable {
             Label label = new Label(producte.getNom());
             label.getStyleClass().setAll("products");
             label.setPrefHeight(100);
-
-
             box.getChildren().addAll(img, label);
             gridProduct.add(box, c, r);
             if (c < 6) c++;
@@ -213,48 +230,57 @@ public class VendaController implements Initializable {
                 c = 0;
                 r++;
             }
-            producte.setCant(1);
             box.setOnMouseClicked(v -> {
-
+                num = (!k.clic().isEmpty()) ? Integer.parseInt(k.clic()) : 1;
                 addTicket(producte.getId_prod(), producte.getNom(), producte.getPreu_venda(), prodObsList);
+                eq = "";
             });
+
         }
     }
-    String eq = "";
-    public int clic(){
 
-        b0.setOnMouseClicked(v -> eq = eq + b0.getText());
-        b1.setOnMouseClicked(v -> eq = eq + b1.getText());
-        b2.setOnMouseClicked(v -> eq = eq + b2.getText());
-        b3.setOnMouseClicked(v -> eq = eq + b3.getText());
-        b4.setOnMouseClicked(v -> eq = eq + b4.getText());
-        b5.setOnMouseClicked(v -> eq = eq + b5.getText());
-        b6.setOnMouseClicked(v -> eq = eq + b6.getText());
-        b7.setOnMouseClicked(v -> eq = eq + b7.getText());
-        b8.setOnMouseClicked(v -> eq = eq + b8.getText());
-        b9.setOnMouseClicked(v -> eq = eq + b9.getText());
-        /*bMenys.setOnMouseClicked(v -> {
-            System.out.println(eq);
-            eq = "";
-        });*/
-        return Integer.parseInt(eq);
-    }
+    /**
+     * Comprova si ja existeix el Producte a la llista del tiquet
+     * Si existeix, augmenta la quantitat a la llista
+     * Si no existeix, afegeix le Producte a la llista
+     * @param id id del Producte
+     * @param nom nom del Producte
+     * @param preu preu del Producte
+     * @param obl llista on s'afegeix el Producte
+     */
     public static void addTicket(int id, String nom, double preu, ObservableList<Producte> obl){
-
         int a = 0;
-        if (obl.isEmpty()) obl.add(new Producte(id, nom, 1, preu));
+        if (obl.isEmpty()) obl.add(new Producte(id, nom, num, preu));
         else {
             for (int i = 0; i < obl.size(); i++) if (obl.get(i).getId_prod() == id) a = i;
-            if (obl.get(a).getId_prod() == id) obl.set(a, new Producte(id, nom, obl.get(a).cant + 1, preu));
+            if (obl.get(a).getId_prod() == id) obl.set(a, new Producte(id, nom, obl.get(a).cant + num, preu));
             else obl.add(new Producte(id, nom, num, preu));
         }
     }
-    public void borrar(ActionEvent event) {
-        prodObsList.remove((!listView.getSelectionModel().isEmpty()) ? listView.getSelectionModel().getSelectedIndex() : prodObsList.size()-1);
-        listView.getSelectionModel().clearSelection();
-        itemTotal.setText(String.valueOf(0.00));
-        itemPreu.setText(String.valueOf(0.00));
-        itemCant.setText(String.valueOf(0));
-        itemDesc.setText("--");
+
+    /**
+     * Si no hi ha cap Producte del tiquet seleccionat, borra l'ultim
+     * Si hi ha algun Producte sel·leccionat, l'esborra (cant = 1) o resta 1 a cant (cant > 1)
+     * @param event
+     */
+    public void borrarUltim(ActionEvent event) {
+        Producte p  = listView.getSelectionModel().getSelectedItem();
+        if (p != null){
+            if (p.getCant() > 1) {
+                p.setCant(p.getCant() - 1);
+                prodObsList.set(listView.getSelectionModel().getSelectedIndex(), p);
+            }
+            else{
+                prodObsList.remove((!listView.getSelectionModel().isEmpty()) ? listView.getSelectionModel().getSelectedIndex() : prodObsList.size()-1);
+                listView.getSelectionModel().clearSelection();
+            }
+        } else {
+            prodObsList.remove((!listView.getSelectionModel().isEmpty()) ? listView.getSelectionModel().getSelectedIndex() : prodObsList.size()-1);
+            listView.getSelectionModel().clearSelection();
+            itemTotal.setText(String.valueOf(0.00));
+            itemPreu.setText(String.valueOf(0.00));
+            itemCant.setText(String.valueOf(0));
+            itemDesc.setText("--");
+        }
     }
 }

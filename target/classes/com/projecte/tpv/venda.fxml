@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="@css/estils.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.tpv.VendaController" >
+<BorderPane stylesheets="@css/estils.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projecte.tpv.VendaController">
    <left>
       <VBox fx:id="menuLateral" prefWidth="120.0" styleClass="lateral" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -127,7 +127,7 @@
                         <String fx:value="btn1" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="btnZ" mnemonicParsing="false" onAction="#opZ" prefHeight="75.0" prefWidth="65.0" text="Z" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                  <Button fx:id="btnZ" mnemonicParsing="false" onAction="#opZ" prefHeight="160.0" prefWidth="65.0" text="Z" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="1" GridPane.rowSpan="2">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
@@ -181,7 +181,7 @@
                         <String fx:value="btn1" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="b0" mnemonicParsing="false" prefHeight="75.0" prefWidth="65.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <Button fx:id="b0" mnemonicParsing="false" prefHeight="75.0" prefWidth="140.0" text="0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
@@ -199,7 +199,7 @@
                         <String fx:value="btn1" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="bMenys" mnemonicParsing="false" prefHeight="75.0" prefWidth="65.0" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                  <Button fx:id="bC" mnemonicParsing="false" onAction="#borrarUltim" prefHeight="75.0" prefWidth="65.0" text="C" GridPane.columnIndex="3" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
@@ -217,24 +217,6 @@
                         <String fx:value="btn1" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="bBorrar" mnemonicParsing="false" onAction="#borrar" prefHeight="75.0" prefWidth="65.0" text="C" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                     <styleClass>
-                        <String fx:value="btn-info" />
-                        <String fx:value="btn1" />
-                     </styleClass>
-                  </Button>
-                  <Button fx:id="bMult" mnemonicParsing="false" prefHeight="75.0" prefWidth="65.0" text="*" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                     <styleClass>
-                        <String fx:value="btn-info" />
-                        <String fx:value="btn1" />
-                     </styleClass>
-                  </Button>
                   <Button mnemonicParsing="false" onAction="#toPay" prefHeight="75.0" prefWidth="140.0" text="Pay" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets />
@@ -244,7 +226,7 @@
                         <String fx:value="btn1" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="bMult1" mnemonicParsing="false" prefHeight="75.0" prefWidth="65.0" text="+" GridPane.columnIndex="3">
+                  <Button fx:id="bSumSub" mnemonicParsing="false" prefHeight="75.0" prefWidth="65.0" text="+/-" GridPane.columnIndex="3">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
@@ -262,7 +244,7 @@
                         <String fx:value="btn1" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="bSuma1" mnemonicParsing="false" onAction="#nouClient" prefHeight="75.0" prefWidth="65.0" text="Nou client" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                  <Button fx:id="bNouClient" mnemonicParsing="false" onAction="#nouClient" prefHeight="75.0" prefWidth="65.0" text="AC" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
                      <styleClass>
                         <String fx:value="btn-info" />
                         <String fx:value="btn1" />

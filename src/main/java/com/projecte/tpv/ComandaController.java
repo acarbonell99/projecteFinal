@@ -20,17 +20,30 @@ public class ComandaController implements Initializable {
     public Label labNom;
     public Button btnCancel;
 
+    /**
+     * Recull les dades del producte a sol·licitar en la comanda
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         labId.setText(String.valueOf(prdComanda.getId_prod()));
         labNom.setText(prdComanda.getNom());
     }
 
+    /**
+     * Confirmar la sol·licitud de comanda
+     * @param event
+     */
     public void confirmar(ActionEvent event) {
         comandaProductes(prdComanda.getId_prod(), Integer.parseInt(fieldCant.getText()));
         closeWindow(btnCancel);
     }
 
+    /**
+     * Cancelar la sol·licitud de comanda
+     * @param event
+     */
     public void caneclar(ActionEvent event) {
         closeWindow(btnCancel);
     }
