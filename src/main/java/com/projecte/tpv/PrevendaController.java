@@ -19,7 +19,7 @@ public class PrevendaController {
      * @param event
      */
     public void toProducte(ActionEvent event) {
-        openWindow("prePersonal.fxml", "Personal", true, btnBack.getScene());
+        openWindow("productes.fxml", "Productes", true, btnBack.getScene());
     }
 
     /**

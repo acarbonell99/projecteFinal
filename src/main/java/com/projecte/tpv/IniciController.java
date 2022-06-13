@@ -30,12 +30,6 @@ public class IniciController implements Initializable {
         initDb();
         btnVenda.setDisable(!inicialitzar);
         btnPostvenda.setDisable(!finalitzar);
-        //
-        try {
-            db.deleteProd(10009);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
