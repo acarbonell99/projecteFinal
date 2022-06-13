@@ -5,10 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
-
 import java.io.IOException;
-import java.sql.SQLException;
 
+/**
+ * @author Aida carbonell Niubo
+ */
 public class HelloApplication extends Application {
     public static Stage st = null;
 

@@ -2,6 +2,7 @@ package com.projecte.tpv;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import org.bson.Document;
 
@@ -10,8 +11,12 @@ import java.util.*;
 
 import static com.projecte.tpv.DatabaseMongo.*;
 import static com.projecte.tpv.Generals.*;
-import static com.projecte.tpv.HelloApplication.st;
 
+/**
+ * Controls la finestra Recompte de Postvenda
+ * S'ha d'introduir manualment el nombre de monedes i bitllets que hi ha a caixa i el total de datafon (si n'hi ha), la classe calcula automaticament les sumes i restes segons convingui fins al "total produccio" que hauria de ser el mateix que "total Z", que es el que el programa calcula a traves dels tiquets venuts
+ * @author Aida Carbonell Niubo
+ */
 public class RecompteController implements Initializable {
     public TextField b5, b10, b20, b50, b100,b200, b500;
     public TextField m001, m002, m005, m01, m02, m05, m1, m2;
@@ -25,10 +30,12 @@ public class RecompteController implements Initializable {
         caixer.setText(treballador);
         date.setText(dateInicial);
         numZfield.setText(String.valueOf(numZ));
+        totalZ.setText(String.valueOf(totalZ2));
     }
 
     /**
-     * Torna a al finestra anterior
+     * Torna a al finestra anterior<br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void back(ActionEvent event) {
@@ -36,7 +43,8 @@ public class RecompteController implements Initializable {
     }
 
     /**
-     * Genera un document amb el resum de contabilitat de la venda finalitzada
+     * Genera un document amb el resum de contabilitat de la venda finalitzada<br/>
+     * Veure: {@link #totalEfectiu()}
      * @param event
      */
     public void enviarRecompte(ActionEvent event) {
@@ -80,7 +88,7 @@ public class RecompteController implements Initializable {
     }
 
     /**
-     * Fa els calculs de diners introduits
+     * Fa els calculs dels diners introduits
      */
     public void totalEfectiu(){
         bTotal.setText(String.valueOf(Integer.parseInt(b500.getText())*500 + Integer.parseInt(b200.getText())*200 + Integer.parseInt(b100.getText())*100 + Integer.parseInt(b50.getText())*50 + Integer.parseInt(b20.getText())*20 + Integer.parseInt(b10.getText())*10 + Integer.parseInt(b5.getText())*5));

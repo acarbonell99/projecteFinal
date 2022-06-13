@@ -1,31 +1,35 @@
 package com.projecte.tpv;
 
-import com.projecte.tpv.model.Producte;
 import com.projecte.tpv.model.Treballador;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-
 import static com.projecte.tpv.DatabaseSql.gueryGeneric;
 import static com.projecte.tpv.Generals.openWindow;
-import static com.projecte.tpv.HelloApplication.st;
 
+/**
+ * Nomes mostra el personal<br/>
+ * Aquesta classe no te cap altre funcionalitat, no ha hestat desenvolupada
+ * @author Aida Carbonell Niubo
+ */
 public class PersonalController implements Initializable {
     public static ObservableList<Treballador> trebOl = FXCollections.observableArrayList();
     public TableView<Treballador> table;
 
+    /**
+     * Veure: {@link #listTreballador()}
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -44,7 +48,8 @@ public class PersonalController implements Initializable {
     }
 
     /**
-     * Tornar a la finestra anterior
+     * Tornar a la finestra anterior<br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void back(ActionEvent event) {
@@ -52,7 +57,8 @@ public class PersonalController implements Initializable {
     }
 
     /**
-     * Emplena la taula de Treballadors
+     * Emplena la taula de Treballadors<br/>
+     * Veure: {@link DatabaseSql#gueryGeneric(String)}
      * @throws SQLException
      * @deprecated no esta desenvolupat
      */

@@ -2,15 +2,23 @@ package com.projecte.tpv;
 
 import com.projecte.tpv.model.Producte;
 import com.projecte.tpv.model.Treballador;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controlador dels metodes de MySQL
+ * Conte la informacio base de productes
+ * @author Aida Carbonell Niubo
+ */
 public class DatabaseSql {
     final static String uri = "jdbc:mysql://localhost/tpv2?user=myuser&password=mypass";
     private static Connection conn;
 
+    /**
+     * Conectar a la base de dades de MySQL
+     * @throws CannotConnectException
+     */
     public void connect() throws CannotConnectException {
         try {
             conn = DriverManager.getConnection(uri);
@@ -20,7 +28,7 @@ public class DatabaseSql {
     }
 
     /**
-     * MEtode generic que a fer ocnsultes a la base de dades SQL
+     * Metode generic que a fer ocnsultes a la base de dades SQL
      * @param t nom de la taula a consultar
      * @return  ResultSet All result to table s
      * @throws SQLException
@@ -33,28 +41,24 @@ public class DatabaseSql {
     /**
      * @return llista de treballadors
      * @throws SQLException
-     * @deprecated no s'utilitza
+     * @deprecated no esta desenvolupat
      */
     public List<Treballador> queryTreballadors() throws SQLException {
         List<Treballador> lt = new ArrayList<>();
         ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM treballador;");
-        while (rs.next()){
-            lt.add(new Treballador(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5), rs.getDate(6), rs.getInt(7), rs.getString(8), rs.getString(9)));
-        }
+        while (rs.next()) lt.add(new Treballador(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5), rs.getDate(6), rs.getInt(7), rs.getString(8), rs.getString(9)));
         return lt;
     }
 
     /**
-     *
+     * Selcciona els productes que tenen la maeixa id de categoria que es passa per paramentre
      * @param s nom de la categoria
      * @return id de l'ultim producte d'una categoria pasada per parametre
      * @throws SQLException
      */
     public static int queryWhereCat(String s) throws SQLException {
         ResultSet resultSet = conn.createStatement().executeQuery("SELECT id_prod FROM producte As pr JOIN categoria AS cat ON pr.id_cat = cat.id_cat where cat.nom = '" + s + "' ORDER BY id_prod DESC LIMIT 1;");
-        while (resultSet.next()){
-            return resultSet.getInt(1);
-        }
+        while (resultSet.next()) return resultSet.getInt(1);
         return 0;
     }
 
@@ -64,8 +68,7 @@ public class DatabaseSql {
      * @throws SQLException
      */
    public static ResultSet queryProdXCat1(String w) throws SQLException {
-       ResultSet resultSet = conn.createStatement().executeQuery("SELECT * FROM producte WHERE id_cat = '" + w + "';");
-       return resultSet;
+       return conn.createStatement().executeQuery("SELECT * FROM producte WHERE id_cat = '" + w + "';");
    }
 
     /**
@@ -79,11 +82,7 @@ public class DatabaseSql {
        try {
            if (w.equals("null")) rs = gueryGeneric("producte");
            else rs = conn.createStatement().executeQuery("SELECT * FROM producte WHERE id_cat = '" + w + "';");
-           while (rs.next()){
-               if (rs.getBoolean(12) == true){
-                   prd.add(new Producte(rs.getInt(1), rs.getString(2), rs.getDouble(7), rs.getString(10)));
-               }
-           }
+           while (rs.next()) if (rs.getBoolean(12) == true) prd.add(new Producte(rs.getInt(1), rs.getString(2), rs.getDouble(7), rs.getString(10)));
        } catch (SQLException e) {
            e.printStackTrace();
        }
@@ -91,46 +90,43 @@ public class DatabaseSql {
    }
 
     /**
+     * Selcciona el producte corresponent a la id que es passa per parametrte
      * @param w id producte
      * @return Selecciona el Producte on id_prod es igual a w
      * @throws SQLException
      */
    public static Producte selProd(int w) throws SQLException {
        ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM producte WHERE id_prod = " + w + ";" );
-       while (rs.next()){
-           return new Producte(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getDouble(7), rs.getDouble(8), rs.getInt(9), rs.getString(10), rs.getBoolean(11), rs.getBoolean(11));
-       }
+       while (rs.next()) return new Producte(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getDouble(7), rs.getDouble(8), rs.getInt(9), rs.getString(10), rs.getBoolean(11), rs.getBoolean(11));
        return null;
    }
 
     /**
+     * Selcciona la id de la categoria corresponent al nom que es passa per parametrte
      * @param w nom de la categoria
      * @return  id_cat igual a w (nom)
      * @throws SQLException
      */
    public static String queryIdCat(String w) throws SQLException {
        ResultSet resultSet = conn.createStatement().executeQuery("SELECT id_cat FROM categoria WHERE nom = '" + w + "';" );
-       while (resultSet.next()){
-           return  resultSet.getString(1);
-       }
+       while (resultSet.next()) return  resultSet.getString(1);
        return null;
    }
 
     /**
+     * Selcciona el nom de la categoria corresponent a la id que es passa per parametrte
      * @param w id de categoria
      * @return  name igual a w (id_cat)
      * @throws SQLException
      */
    public static String queryNomCat(String w) throws SQLException {
        ResultSet resultSet = conn.createStatement().executeQuery("SELECT nom FROM categoria WHERE id_cat = '" + w + "';" );
-       while (resultSet.next()){
-           return  resultSet.getString(1);
-       }
+       while (resultSet.next()) return  resultSet.getString(1);
        return null;
    }
 
-
     /**
+     * Inserta un producte nou a la base  de dades
      * @param p Producte a insertar a la abse de dades
      * @throws SQLException
      */
@@ -152,7 +148,7 @@ public class DatabaseSql {
    }
 
     /**
-     * Actualitzar la informació d'un producte
+     * Actualitzar la informacio d'un producte
      * @param p Producte a actualitar a la base de dades
      * @throws SQLException
      * @see FitxaController
@@ -232,7 +228,7 @@ public class DatabaseSql {
                 "\t('Ivan', 'Gimeno', 'Griego', '74771782R', '1993-08-27', '2020-01-01', 656801147, 'r00005', 'img'),\n" +
                 "\t('Marta', 'Gaitán', 'Cedillo', '99133788Q', '1978-12-06', '2018-01-01', 695542020, 'r00005', 'img'),\n" +
                 "\t('Ismael', 'Marco', 'Coronado', '81479799E', '1999-07-18', '2018-01-01',  603322005, 'r00005', 'img'),\n" +
-                "\t('Rodrigo', 'Córdova', 'Segundo', '23452424Z', '1992-06-21', '2018-01-01',  671813318, 'r00005', 'img'),\n" +
+                "\t('Rodrigo', 'Cordova', 'Segundo', '23452424Z', '1992-06-21', '2018-01-01',  671813318, 'r00005', 'img'),\n" +
                 "\t('Isaac', 'Padilla', 'Tercero', '21776967S', '1989-02-14', '2018-01-01',  659077333, 'r00004', 'img'),\n" +
                 "\t('Carlota', 'Montalvo', 'Rojas', '14712073P', '1996-06-21', '2018-01-01',  694930687, 'r00004', 'img'),\n" +
                 "\t('Celia', 'Garza', 'Rojas', '22934885K', '1989-08-30', '2018-01-01',  664563263, 'r00004', 'img');");

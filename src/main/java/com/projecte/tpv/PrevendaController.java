@@ -1,35 +1,30 @@
 package com.projecte.tpv;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
-
 import java.time.LocalDateTime;
-
 import static com.projecte.tpv.Generals.*;
-import static com.projecte.tpv.HelloApplication.st;
 
+/**
+ * Es una finestra ed navegació per a les accions de Prevenda
+ * @author Aida Carbonell Niubo
+ */
 public class PrevendaController {
     public Button btnBack;
 
     /**
-     * Navegar a la finestra de Productes
+     * Navegar a la finestra de Productes<br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void toProducte(ActionEvent event) {
-        try {
-            Parent root2 = new FXMLLoader(IniciController.class.getResource("productes.fxml")).load();
-            btnBack.getScene().setRoot(root2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        openWindow("prePersonal.fxml", "Personal", true, btnBack.getScene());
     }
 
     /**
-     * Navegar a la finestra de Productes
+     * Navegar a la finestra de Productes<br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void toPersonal(ActionEvent event) {
@@ -37,19 +32,18 @@ public class PrevendaController {
     }
 
     /**
-     * Tornar a la finestra anterior
+     * Tornar a la finestra anterior<br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void backInici(ActionEvent event) {
         openWindow("inici.fxml", "Inici", true, btnBack.getScene());
     }
-    /*public void back(ActionEvent event) {
-        openWindow("prevenda.fxml", "Prevenda", true, btnBack.getScene());
-    }*/
 
     /**
-     * Inicialitza la venda i activa al el boto de Venda
-     * Retorna a ala finestra d'Inici
+     * Inicialitza la venda i activa al el boto de Venda<br/>
+     * Retorna a ala finestra d'Inici<br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void inizialitze(ActionEvent event) {

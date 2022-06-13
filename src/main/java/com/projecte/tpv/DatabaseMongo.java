@@ -23,10 +23,17 @@ import static com.mongodb.client.model.Sorts.descending;
 import static com.projecte.tpv.Generals.*;
 import static com.projecte.tpv.PagarController.data;
 
+/**
+ * Controlador dels metodes de MongoDB
+ * Recull la informacio generada durant l'execucio del programa
+ * @author Aida Carbonell Niubo
+ */
 public class DatabaseMongo {
     final static String uri = "mongodb://localhost";
     public static MongoDatabase database;
     public static MongoCollection<Document> collection;
+    static ArrayList<Producte> prdStock = new ArrayList<>();
+    static double totalZ2;
 
     /**
      * Conectar a la base de dades de MongoDB
@@ -41,28 +48,10 @@ public class DatabaseMongo {
         }
     }
 
-    /*public void omplir(){
-        List<Document> tr = new ArrayList<>();
-        tr.add(new Document().append("dni", "22934885K").append("id_rol", "r00004"));
-        tr.add(new Document().append("dni", "95631282L").append("id_rol", "r00005"));
-        tr.add(new Document().append("dni", "74771782R").append("id_rol", "r00005"));
-        List<String> tpv = new ArrayList<>();
-        tpv.add("b0001");
-        tpv.add("b0002");
-        tpv.add("b0003");
-        collection = database.getCollection("pdv");
-        Document doc = new Document();
-        doc.append("pdv", "b00002");
-        doc.append("numTpv", 10);
-        doc.append("personal", tr);
-        doc.append("tpv", tpv);
-        collection.insertOne(doc);
-    }*/
-
     /**
      * Crea el tiquet d'una venda (Es genera uqna es finalitza la venda)
      * @param obs llista de productes venuts
-     * @param total suma total dels producte svenuts
+     * @param total suma total dels producte venuts
      */
     public void crearTicket(ObservableList<Producte> obs, double total){
         List<Document> pr = new ArrayList<>();
@@ -80,7 +69,8 @@ public class DatabaseMongo {
     }
 
     /**
-     * Finalitzar l'activitat de venda
+     * Finalitzar l'activitat de venda<br/>
+     * Veure: {@link #nextZ()}
      */
     public static void operacionZ(){
         numZ = nextZ();
@@ -101,11 +91,12 @@ public class DatabaseMongo {
                 .append("data_final", dateFinal)
                 .append("recaptacioZ", df.format(r))
                 .append("tickets", docs));
+        totalZ2 = (double) r;
     }
 
     /**
-     * Calcula el numero de Z següent
-     * @return numero de Z següent
+     * Calcula el numero de Z seguent
+     * @return numero de Z seguent
      */
     public static int nextZ(){
         collection = database.getCollection("recopilacio");
@@ -114,8 +105,8 @@ public class DatabaseMongo {
     }
 
     /**
-     * Calcula el numero de tiquet següent
-     * @return numero de tiquet següent
+     * Calcula el numero de tiquet seguent
+     * @return numero de tiquet seguent
      */
     public static int nextIdTicket(){
         collection = database.getCollection("ticket");
@@ -123,8 +114,10 @@ public class DatabaseMongo {
         return collection.find().sort(descending("id_ticket")).first().getInteger("id_ticket")+1;
     }
 
+    /**
+     * Calcula el numero de tiquet seguent
+     */
     public static void nextIdTicket2(){
-        System.out.println(idticket);
         collection = database.getCollection("recopilacio");
         if (collection.find().sort(descending("numZ")).first() == null) idticket = nextIdTicket();
         else {
@@ -132,8 +125,6 @@ public class DatabaseMongo {
             doc.forEach(d -> idticket = Math.max(idticket, d.getInteger("id_ticket")));
         }
     }
-
-    static ArrayList<Producte> prdStock = new ArrayList<>();
 
     /**
      * Realitza el calcul de l'estoc que hi hauria d'haver sogons el que 'sha venut.
@@ -158,6 +149,7 @@ public class DatabaseMongo {
     }
 
     /**
+     * Crea un document dels productes gastats durant una venda
      * @param id id del producte
      * @param cant quantitat del producte a demanar
      */

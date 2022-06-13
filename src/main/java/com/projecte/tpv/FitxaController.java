@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -19,12 +18,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import static com.projecte.tpv.DatabaseSql.*;
 import static com.projecte.tpv.Generals.closeWindow;
 import static com.projecte.tpv.ProducteController.row;
 import static com.projecte.tpv.model.Producte.nextId;
 
+/**
+ * Controla la finestra Fitxa tecnica de Productes
+ * Depenent del valor de row la fitxa s'obre en blanc per realitzar insercions, o obra la informacio del producte sel·leccionat
+ * @author Aida Carbonell NIubo
+ */
 public class FitxaController implements Initializable {
     @FXML
     public Button btnCancel;
@@ -46,8 +49,9 @@ public class FitxaController implements Initializable {
     public TextField fieldCant;
 
     /**
-     * Crea una List amb el nom de totes les categories
-     * Omple el ChoiseBox per seleccionar una categoria
+     * Crea una List amb el nom de totes les categories<br/>
+     * Omple el ChoiseBox per seleccionar una categoria<br/>
+     * Veure: {@link DatabaseSql#gueryGeneric(String)}
      * @throws SQLException
      */
     public void choiseCat() throws SQLException {
@@ -61,13 +65,16 @@ public class FitxaController implements Initializable {
     }
 
     /**
-     * Si row==0 la fitxa tecnica estarà en blanc, en cas contrari, cridda al metode ompirFitxa(Producte) per omplir la fitxaamb les dades del producte sel·leccionat
+     * Si row==0 la fitxa tecnica estara en blanc, en cas contrari, crida al metode ompirFitxa(Producte) per omplir la fitxa amb les dades del producte sel·leccionat<br/>
+     * Veure: {@link #ompirFitxa(Producte)}<br/>
+     * Veure: {@link #choiseCat()}<br/>
+     * Veure: {@link Producte#nextId(String)}<br/>
      * @param url
      * @param resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (row != 0){
+        if (row != 0) {
             try {
                 ompirFitxa(selProd(row));
             } catch (SQLException e) {
@@ -89,7 +96,8 @@ public class FitxaController implements Initializable {
     }
 
     /**
-     * Recupera les dades del Producte passat per parametre
+     * Recupera les dades del Producte passat per parametre<br/>
+     * Veure: {@link DatabaseSql#queryNomCat(String)}
      * @param p Producte sel·leccionat
      * @throws SQLException
      */
@@ -115,7 +123,7 @@ public class FitxaController implements Initializable {
      * Comprova si la fitxa es editable o no
      * @param b
      */
-    public void active(boolean b){
+    public void active(boolean b) {
         fieldNom.setDisable(b);
         fieldDesc.setDisable(b);
         fieldCost.setDisable(b);
@@ -131,15 +139,19 @@ public class FitxaController implements Initializable {
     }
 
     /**
-     * Si s'estacreant un Producte nou, s'inserteix a la base de dades
-     * Si d'està actualitzant un Producte, l'actualitza a la base de dades
+     * Si s'estacreant un Producte nou, s'inserteix a la base de dades<br/>
+     * Si d'esta actualitzant un Producte, l'actualitza a la base de dades<br/>
+     * Veure: {@link #active(boolean)}<br/>
+     * Veure: {@link DatabaseSql#updateProd(Producte)}<br/>
+     * Veure: {@link DatabaseSql#insertProd(Producte)}<br/>
+     * Veure: {@link Generals#closeWindow(Button)}
      * @param event
      * @throws SQLException
      */
     public void save(ActionEvent event) throws SQLException {
-        if (btnSave.getText().equals("Edit")){
+        if (btnSave.getText().equals("Edit")) {
             active(false);
-        } else if (btnSave.getText().equals("Save")){
+        } else if (btnSave.getText().equals("Save")) {
             updateProd(new Producte(Integer.parseInt(fieldId.getText()), fieldNom.getText(), fieldDesc.getText(), Integer.parseInt(fieldCant.getText()), Integer.parseInt(fieldStock.getText()), queryIdCat(String.valueOf(selCat.getSelectionModel().getSelectedItem())), Double.parseDouble(fieldPvp.getText()), Double.parseDouble(fieldCost.getText()), Integer.parseInt(String.valueOf(10)), imagePath, checkCons.isSelected(), checkVendible.isSelected()));
             closeWindow(btnCancel);
         } else {
@@ -149,7 +161,8 @@ public class FitxaController implements Initializable {
     }
 
     /**
-     * Tanca la finastra de Fitxa tecnica sense gardad res
+     * Tanca la finastra de Fitxa tecnica sense gardad res<br/>
+     * Veure: {@link Generals#closeWindow(Button)}
      * @param event
      */
     public void cancel(ActionEvent event) {
@@ -158,7 +171,7 @@ public class FitxaController implements Initializable {
     }
 
     /**
-     * Afegeix o actualitza la foto de Producte
+     * Afegeix o actualitza la foto de Producte<br/>
      * Obre el selector d'imatges que permet navegar i sel·leccionar-la
      * @param event
      * @throws IOException
@@ -168,7 +181,7 @@ public class FitxaController implements Initializable {
         fileChooser.setTitle("Open Resource File");
         fileChooser.setInitialDirectory(new File("C:\\Users\\acarb\\Documents\\2WIAM\\projecteFinal\\tpv\\src\\main\\resources\\com\\projecte\\tpv\\img"));
         File file = fileChooser.showOpenDialog(new Stage());
-        if (file != null){
+        if (file != null) {
             imagePath = file.toURI().toString();
             image.setImage(new Image(imagePath));
         } else {

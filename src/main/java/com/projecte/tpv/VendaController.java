@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,12 +28,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.projecte.tpv.DatabaseMongo.operacionZ;
-import static com.projecte.tpv.DatabaseMongo.stockGastat;
+import static com.projecte.tpv.DatabaseMongo.*;
 import static com.projecte.tpv.DatabaseSql.queryProdXCat;
 import static com.projecte.tpv.Generals.*;
 import static com.projecte.tpv.Keyboard.*;
 
+/**
+ * Controla totes les accions de la finestra de Venda
+ * @author Aida Carbonell Niubo
+ */
 public class VendaController implements Initializable {
     public static ObservableList<Producte> prodObsList = FXCollections.observableArrayList();
     public static ObservableList<Producte> obsTemp = FXCollections.observableArrayList();
@@ -45,27 +49,25 @@ public class VendaController implements Initializable {
     public Button b1;
     public Button b2;
     public Button b0;
-    public Button bNouClient;
-    public Button bBorrar;
     public Button b3;
     public Button b4;
     public Button b7;
-    public Button bComa;
     public Button b6;
     public Button b8;
     public Button b5;
     public Button b9;
-    public Button bAC;
     public Button bC;
     public Button bSumSub;
     private boolean aparcat = false;
     static int num = 1;
-
-    @FXML
     public Button btnAparcar;
-    @FXML
     public VBox menuLateral;
 
+    /**
+     * Veure: {@link #menuLateral()}
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         menuLateral();
@@ -92,7 +94,8 @@ public class VendaController implements Initializable {
     }
 
     /**
-     * Torna a la pantalla d'Inici
+     * Torna a la pantalla d'Inici<br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void backInici(ActionEvent event) {
@@ -100,7 +103,8 @@ public class VendaController implements Initializable {
     }
 
     /**
-     * Navega a la finestra de Pagar
+     * Navega a la finestra de Pagar<br/>
+     * Veure: {@link Generals#openWindow(String, String)}
      * @param event
      */
     public void toPay(ActionEvent event) {
@@ -138,8 +142,13 @@ public class VendaController implements Initializable {
 
     /**
      * Finalitza la venda i recull els tiquets generats durant aquesta venda  en un sol document
-     * Tanca la Finestra de Venda i obre la d'Inici
-     * Venda queda bloquejat fins a inicialitzar una altra vegada la TPV i Postvenda queda desbloquejat
+     * <br/>
+     * Tanca la Finestra de Venda i obre la d'Inici<br/>
+     * Venda queda bloquejat fins a inicialitzar una altra vegada la TPV i Postvenda queda desbloquejat<br/>
+     * Veure: {@link DatabaseMongo#stockGastat()} <br/>
+     * Veure: {@link DatabaseMongo#operacionZ()} <br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)} <br/>
+     *
      * @param event
      */
     public void opZ(ActionEvent event) {
@@ -149,10 +158,13 @@ public class VendaController implements Initializable {
         inicialitzar = false;
         openWindow("inici.fxml", "Inici", true, btnAparcar.getScene());
         operacionZ();
+
     }
 
     /**
-     * Crea automaticament el menu lateral utilitzant les categories de la base de dades
+     * Crea automaticament el menu lateral utilitzant les categories de la base de dades<br/>
+     * Veure: {@link Generals#selCat()}<br/>
+     * Veure: {@link #gridCentral(String)}
      */
     public void menuLateral(){
         List<Categoria> cat = selCat();
@@ -160,7 +172,6 @@ public class VendaController implements Initializable {
         btAll.setId("0");
         btAll.setPrefSize(128, 100);
         btAll.getStyleClass().setAll("btn","btn-primary", "btn1");
-        //btAll.setStyle("-fx-background-radius: 8; -fx-border-radius: 8;");
         btAll.setAlignment(Pos.CENTER);
         menuLateral.getChildren().add(btAll);
         menuLateral.setMargin(btAll, new Insets(4, 0, 4, -8));
@@ -169,7 +180,6 @@ public class VendaController implements Initializable {
             bt.setId(c.id_cat);
             bt.setPrefSize(128, 100);
             bt.getStyleClass().setAll("btn","btn-info", "btn1");
-            //bt.setStyle("-fx-background-radius: 8; -fx-border-radius: 8;");
             bt.setAlignment(Pos.CENTER);
             menuLateral.getChildren().add(bt);
             menuLateral.setMargin(bt, new Insets(4, 0, 0, -8));
@@ -191,9 +201,12 @@ public class VendaController implements Initializable {
     }
 
     /**
-     * Omple el grid ccentral amb tots els productes de la bse de dades
-     * Per defecte es mostren tots els productes, en sel·leccionar una categoria nomes es mostren els productes d'aquella categoria
-     * En clicar un Producte s'afegeix al tiquet
+     * Omple el grid ccentral amb tots els productes de la bse de dades <br/>
+     * Per defecte es mostren tots els productes, en sel·leccionar una categoria nomes es mostren els productes d'aquella categoria<br/>
+     * En clicar un Producte s'afegeix al tiquet<br/>
+     * Veure: {@link #addTicket(int, String, double, ObservableList)}<br/>
+     * Veure: {@link Keyboard#clic()}<br/>
+     * Veure: {@link DatabaseSql#queryProdXCat(String)}
      * @param s
      * @throws SQLException
      */
@@ -235,14 +248,13 @@ public class VendaController implements Initializable {
                 addTicket(producte.getId_prod(), producte.getNom(), producte.getPreu_venda(), prodObsList);
                 eq = "";
             });
-
         }
     }
 
     /**
-     * Comprova si ja existeix el Producte a la llista del tiquet
-     * Si existeix, augmenta la quantitat a la llista
-     * Si no existeix, afegeix le Producte a la llista
+     * Comprova si ja existeix el Producte a la llista del tiquet<br/>
+     * Si existeix, augmenta la quantitat a la llista<br/>
+     * Si no existeix, afegeix le Producte a la llista<br/>
      * @param id id del Producte
      * @param nom nom del Producte
      * @param preu preu del Producte
@@ -259,7 +271,7 @@ public class VendaController implements Initializable {
     }
 
     /**
-     * Si no hi ha cap Producte del tiquet seleccionat, borra l'ultim
+     * Si no hi ha cap Producte del tiquet seleccionat, borra l'ultim<br/>
      * Si hi ha algun Producte sel·leccionat, l'esborra (cant = 1) o resta 1 a cant (cant > 1)
      * @param event
      */

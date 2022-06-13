@@ -1,7 +1,9 @@
 package com.projecte.tpv.model;
 
-import javafx.scene.control.CheckBox;
-
+/**
+ * Representa a les tasques de neteja
+ * @author Aida Carbonell Niubo
+ */
 public class Neteja {
     String tasca;
     boolean fet = false;
@@ -13,7 +15,6 @@ public class Neteja {
     public String getTasca() {
         return tasca;
     }
-
     public void setTasca(String tasca) {
         this.tasca = tasca;
     }
@@ -21,7 +22,6 @@ public class Neteja {
     public boolean isFet() {
         return fet;
     }
-
     public void setFet(boolean fet) {
         this.fet = fet;
     }

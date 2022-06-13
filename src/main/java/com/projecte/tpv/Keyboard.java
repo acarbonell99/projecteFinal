@@ -1,15 +1,14 @@
 package com.projecte.tpv;
 
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
+/**
+ *
+ * Es el controlador de les accions del teclat de pantalla
+ */
 public class Keyboard {
     Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bSumSub;
     static String eq = "";
-
 
     public Keyboard(Button b0, Button b1, Button b2, Button b3, Button b4, Button b5, Button b6, Button b7, Button b8, Button b9, Button bSumSub) {
         this.b0 = b0;
@@ -25,6 +24,9 @@ public class Keyboard {
         this.bSumSub = bSumSub;
     }
 
+    /**
+     * @return un nombre d'unitats de productes
+     */
     public String clic(){
         b0.setOnMouseClicked(v -> eq = eq + b0.getText());
         b1.setOnMouseClicked(v -> eq = eq + b1.getText());

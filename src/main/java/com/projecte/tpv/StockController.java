@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -30,6 +31,11 @@ import static com.projecte.tpv.Generals.openWindow;
 import static com.projecte.tpv.Generals.selCat;
 import static com.projecte.tpv.HelloApplication.st;
 
+/**
+ * Controls la finestra Stock de Postvenda
+ * Gestiona l'esctoc automaticament segons les vendes realitzades durant la Venda, i salta un avis en cas que l'estoc recollit sigui inferior a l'estoc minim indicat de cada producte
+ * @author Aida Carbonell Niubo
+ */
 public class StockController implements Initializable {
     public static ObservableList<Producte> producteObservableList = FXCollections.observableArrayList();
     public TabPane tabPane;
@@ -38,6 +44,11 @@ public class StockController implements Initializable {
     TableView<Producte> table;
     static Producte prdComanda;
 
+    /**
+     * Veure: {@link #tabs()}
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -48,7 +59,8 @@ public class StockController implements Initializable {
     }
 
     /**
-     * Torna a la finestra anterior
+     * Torna a la finestra anterior<br/>
+     * Veure: {@link Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void back(ActionEvent event) {
@@ -56,8 +68,9 @@ public class StockController implements Initializable {
     }
 
     /**
-     * Envia les dades recollides en el control d'estoc a la base de dades
-     * Si s'ha introduit manualment "esctoc real" es garda en nombre introduir en aquell producte, en cas contrari, es guarda el nombre de " estoc esperat"
+     * Envia les dades recollides en el control d'estoc a la base de dades<br/>
+     * Si s'ha introduit manualment "esctoc real" es garda en nombre introduir en aquell producte, en cas contrari, es guarda el nombre de "estoc esperat"<br/>
+     * Veure: {@link DatabaseSql#updateCant(int, int)}
      * @param event
      */
     public void sendStcok(ActionEvent event) {
@@ -72,7 +85,10 @@ public class StockController implements Initializable {
     }
 
     /**
-     * Crea una taula en cada tab amb els Productes de la categoria
+     * Crea una taula en cada tab amb els Productes de la categoria<br/>
+     * Veure: {@link #refresh(TableView)}<br/>
+     * Veure: {@link DatabaseSql#queryProdXCat1(String)}<br/>
+     * Veure: {@link Generals#openWindow(String, String)}<br/>
      * @param newTab
      * @return
      */
@@ -158,10 +174,9 @@ public class StockController implements Initializable {
         tab.setItems(producteObservableList);
     }
 
-
-
     /**
-     * Crea els Tabs del panel utilitzant les categories de la base de dades
+     * Crea els Tabs del panel utilitzant les categories de la base de dades<br/>
+     * Veure: {@link Generals#selCat()}
      * @throws SQLException
      */
     public void tabs() throws SQLException {

@@ -1,5 +1,9 @@
 package com.projecte.tpv.model;
 
+/**
+ * Representa a una categoria
+ * @author Aida Carbonell Niubo
+ */
 public class Categoria {
     public String id_cat;
     public String nom;

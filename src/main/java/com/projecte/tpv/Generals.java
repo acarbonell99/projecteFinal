@@ -8,17 +8,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.projecte.tpv.DatabaseMongo.nextZ;
 import static com.projecte.tpv.DatabaseSql.gueryGeneric;
 
+/**
+ * Recull metodes generics que s'utilitzen de manera recurrent en altres classes
+ * @author Aida Carbonell Niubbo
+ */
 public class Generals {
     static boolean inicialitzar = false;
     static boolean finalitzar = false;
@@ -78,6 +79,8 @@ public class Generals {
     }
 
     /**
+     * Genera una llista de les categories
+     * Veure: {@link DatabaseSql#gueryGeneric(String)}
      * @return llista de categories
      */
     public static List<Categoria> selCat(){
@@ -94,6 +97,8 @@ public class Generals {
     }
 
     /**
+     * Genera una llista de tots el productes
+     * Veure: {@link DatabaseSql#gueryGeneric(String)}
      * @return llsiat de productes
      */
     public static List<Producte> selAllProd(){

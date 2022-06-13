@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-
 import java.io.IOException;
 
+/**
+ * Estableix la interfaç dels items dins el ListView a les pantelles de Venda i Pagar
+ * @author Aida Carbonell Niubo
+ */
 public class ProducteListViewCell extends ListCell<Producte> {
     @FXML
     private Label cant;

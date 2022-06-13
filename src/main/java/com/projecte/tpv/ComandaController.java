@@ -5,14 +5,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import static com.projecte.tpv.DatabaseMongo.comandaProductes;
 import static com.projecte.tpv.Generals.closeWindow;
 import static com.projecte.tpv.StockController.prdComanda;
 
+/**
+ * Envia la sol·licitud de comanda d'un producte quan aquest esta per sota del minim
+ * @author Aida Carbonell Niubo
+ */
 public class ComandaController implements Initializable {
 
     public TextField fieldCant;
@@ -32,7 +34,9 @@ public class ComandaController implements Initializable {
     }
 
     /**
-     * Confirmar la sol·licitud de comanda
+     * Confirmar la sol·licitud de comanda<br/>
+     * Veure: {@link DatabaseMongo#comandaProductes(int, int)}<br/>
+     * Veure: {@link Generals#closeWindow(Button)}
      * @param event
      */
     public void confirmar(ActionEvent event) {
@@ -41,7 +45,8 @@ public class ComandaController implements Initializable {
     }
 
     /**
-     * Cancelar la sol·licitud de comanda
+     * Cancelar la sol·licitud de comanda<br/>
+     * Veure: {@link Generals#closeWindow(Button)}
      * @param event
      */
     public void caneclar(ActionEvent event) {

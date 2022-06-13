@@ -1,13 +1,6 @@
 package com.projecte.tpv;
 
 import com.projecte.tpv.model.Producte;
-import javafx.application.Platform;
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,23 +9,23 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import org.bson.Document;
-
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import static com.projecte.tpv.DatabaseMongo.*;
 import static com.projecte.tpv.Generals.*;
 import static com.projecte.tpv.Keyboard.eq;
 import static com.projecte.tpv.VendaController.addTicket;
 import static com.projecte.tpv.VendaController.prodObsList;
 
+/**
+ * Controla la finestra Pagar de Venda
+ * @author Aida Carbonell Niubo
+ */
 public class PagarController implements Initializable {
     public ListView<Producte> listPagar;
     public ListView<Producte> llistaSeparada = new ListView<>();
@@ -72,25 +65,7 @@ public class PagarController implements Initializable {
         importTotal = 0;
         if (obs.isEmpty()) obs = obsListFirts;
         for (Producte p : obs) importTotal += p.getCant()*p.getPreu_venda();
-
         total.setText(String.valueOf(df.format(importTotal)));
-        /*entregat.setText(String.valueOf(0));
-        SimpleDoubleProperty a = new SimpleDoubleProperty(Integer.parseInt(entregat.getText()));
-        NumberBinding canvi1 = a.subtract(importTotal);
-        //System.out.println(canvi1.getValue());
-        //canvi.setText(String.valueOf(canvi1.getValue()));
-        //canvi.textProperty().bind(canvi1.asString());
-        //canvi.setText(String.valueOf(canvi1.getValue()));
-        entregat.textProperty().bindBidirectional(canvi.textProperty().);
-
-        */
-        /*entregat.setText(String.valueOf(2));
-        int a = Integer.parseInt(entregat.getText());
-        canvi.setText(String.valueOf(a+10));*/
-        Keyboard k = new Keyboard(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bSumSub);
-        System.out.println(k.clic());
-
-
     }
 
     /**
@@ -102,13 +77,19 @@ public class PagarController implements Initializable {
     }
 
     /**
-     * Borrar import introduit
+     * Borrar import introduit<br/>
+     * Veure: {@link #clear()}
      * @param event
      */
     public void borrarUltim(ActionEvent event) {
         clear();
     }
 
+    /**
+     * Veure: {@link #calcularTotal(ObservableList)}
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         obsListFirts.clear();
@@ -119,7 +100,8 @@ public class PagarController implements Initializable {
     }
 
     /**
-     * Dividir compte per ralitzar diferents pagaments
+     * Dividir compte per ralitzar diferents pagaments<br/>
+     * Veure: {@link #selItem(ListView, ListView, ObservableList, ObservableList)}
      * @param event
      */
     public void dividir(ActionEvent event) {
@@ -130,8 +112,10 @@ public class PagarController implements Initializable {
     }
 
     /**
-     * Seleccionar un Producte per canviar-lo de llista.
-     * Funciona en ambdues direccions, un clic i es canvia el Producet de llista, nomes funciona de manera unitaria
+     * Seleccionar un Producte per canviar-lo de llista.<br/>
+     * Funciona en ambdues direccions, un clic i es canvia el Producet de llista, nomes funciona de manera unitaria<br/>
+     * Veure: {@link #calcularTotal(ObservableList)}
+     * Veure: {@link VendaController#addTicket(int, String, double, ObservableList)}
      * @param l1 listView inicial
      * @param l2 listView final
      * @param o1 llista inicial
@@ -153,8 +137,8 @@ public class PagarController implements Initializable {
     }
 
     /**
-     * Selecciona el metode de pagament en efectiu
-     * Queda reflectit en el tiqquet
+     * Selecciona el metode de pagament en efectiu<br/>
+     * Queda reflectit en el tiquet<br/>
      * @param event
      */
     public void pagarEfectiu(ActionEvent event) {
@@ -163,8 +147,8 @@ public class PagarController implements Initializable {
     }
 
     /**
-     * Selecciona el metode de pagament en targeta
-     * Queda reflectit en el tiqquet
+     * Selecciona el metode de pagament en targeta<br/>
+     * Queda reflectit en el tiqquet<br/>
      * @param event
      */
     public void pagarTargeta(ActionEvent event) {
@@ -172,13 +156,15 @@ public class PagarController implements Initializable {
     }
 
     /**
-     * Finalitza la venda
-     * Reinicia la observableList de Venda, queda per inicaiar una nova venda
+     * Finalitza la venda<br/>
+     * Reinicia la observableList de Venda, queda per inicaiar una nova venda<br/>
+     * Veure: {@link #generarTicket()}
+     * Veure: {@link #clear()}
+     * Veure: {@link Generals#closeWindow(Button)}
      * @param event
      */
     public void pagar(ActionEvent event) {
         generarTicket();
-        //prodObsList.clear();
         if (obsListFirts.isEmpty()) {
             div = false;
             prodObsList.clear();
@@ -189,10 +175,13 @@ public class PagarController implements Initializable {
         }
         obsListSeparada.clear();
         clear();
+        eq = "1";
     }
 
     /**
-     * Imprimeix el tiquet per terminal (que seria el tique que s'imprimeix)
+     * Imprimeix el tiquet per terminal (que seria el tique que s'imprimeix)<br/>
+     * Veure: {@link #crearTicket()}
+     * Veure: {@link DatabaseMongo#nextIdTicket2()}
      */
     public void generarTicket(){
         nextIdTicket2();
@@ -278,7 +267,8 @@ public class PagarController implements Initializable {
     }
 
     /**
-     * Tanca la finestra de Pagar i retorna a Vanda per seguir afegint productes al tiquet
+     * Tanca la finestra de Pagar i retorna a Vanda per seguir afegint productes al tiquet<br/>
+     * Veure: {@link Generals#closeWindow(Button)}
      * @param event
      */
     public void addProduct(ActionEvent event) {

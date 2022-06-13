@@ -1,5 +1,7 @@
 package com.projecte.tpv;
 
-
-public class CannotConnectException extends Throwable {
-}
+/**
+ * Recull l'excepcio de les  bades de dades
+ * @author Aida Carbonell Niubo
+ */
+public class CannotConnectException extends Throwable {}

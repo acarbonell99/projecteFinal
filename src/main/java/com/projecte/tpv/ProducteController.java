@@ -7,24 +7,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
-
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-
-//import static com.projecte.tpv.model.Producte.baseSql.gueryGeneric;
-//import static com.projecte.tpv.model.Producte.baseSql.queryProdXCat;
 import static com.projecte.tpv.DatabaseSql.queryProdXCat1;
 import static com.projecte.tpv.Generals.openWindow;
 import static com.projecte.tpv.Generals.selCat;
-import static com.projecte.tpv.HelloApplication.st;
 
+/**
+ * Controla la finestra Producte de Prevenda
+ * Mostra en diferents taules separades tots els productes segons la categoria a al que pertanyen
+ * Des d'aquesta finestra es poden afegir nous productes des del boto "Afegir" abaix a la dreta
+ * Si es clica un producte, s'obre la Fita tecnica amb les seves dades, fent clic a "Edit" es pot editar el producte i guardar el scanvis
+ * @author Aida Carbonell Niubo
+ */
 public class ProducteController implements Initializable {
     public static ObservableList<Producte> producteObservableList = FXCollections.observableArrayList();
     public TabPane tabPane;
@@ -33,7 +35,8 @@ public class ProducteController implements Initializable {
     TableView<Producte> table;
 
     /**
-     * Tornar a la finestra anterior
+     * Tornar a la finestra anterior<br/>
+     * Veure: {@link com.projecte.tpv.Generals#openWindow(String, String, boolean, Scene)}
      * @param event
      */
     public void back(ActionEvent event) {
@@ -41,9 +44,10 @@ public class ProducteController implements Initializable {
     }
 
     /**
-     * Obre la fitxa tecnica en blanc per afegir un nou producte
-     * row = 0 -> Nou producte
-     * row != 0 -> veure un producte existent
+     * Obre la fitxa tecnica en blanc per afegir un nou producte<br/>
+     * row = 0 -> Nou producte<br/>
+     * row != 0 -> veure un producte existent<br/>
+     * Veure: {@link com.projecte.tpv.Generals#openWindow(String, String)}
      * @param event
      */
     public void addProduct(ActionEvent event) {
@@ -52,9 +56,10 @@ public class ProducteController implements Initializable {
     }
 
     /**
-     * Crea una taula en cada tab amb els Productes de la categoria
-     * @param newTab
-     * @return
+     * Crea una taula en cada tab amb els Productes de la categoria<br/>
+     * Veure: {@link com.projecte.tpv.Generals#openWindow(String, String)}
+     * @param newTab pestanya
+     * @return taula de productes
      */
     public TableView<Producte> addTable(Tab newTab){
         TableView<Producte> table = new TableView();
@@ -91,9 +96,9 @@ public class ProducteController implements Initializable {
         return table;
     }
 
-
     /**
-     * Crea els Tabs del panel utilitzant les categories de la base de dades
+     * Crea els Tabs del panel utilitzant les categories de la base de dades<br/>
+     * Veure: {@link Generals#selCat()}
      * @throws SQLException
      */
     public void tabs() throws SQLException {
@@ -107,9 +112,9 @@ public class ProducteController implements Initializable {
         tabPane.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> newTab.setContent(addTable(newTab)));
     }
 
-
     /**
-     * Inicialitza les pestanyes
+     * Inicialitza les pestanyes<br/>
+     * Veure: {@link #tabs()}
      * @param url
      * @param resourceBundle
      */
