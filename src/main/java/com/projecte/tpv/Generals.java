@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 import java.sql.ResultSet;
@@ -62,6 +63,7 @@ public class Generals {
             scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
             st.setScene(scene);
             st.setTitle(title);
+            st.getIcons().add(new Image(VendaController.class.getResourceAsStream("img/logo.png")));
             if (title.equals("Venda")) st.setMaximized(true);
             st.show();
         } catch (Exception e) {

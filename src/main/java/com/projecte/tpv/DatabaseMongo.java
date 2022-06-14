@@ -144,7 +144,6 @@ public class DatabaseMongo {
             if (!prdStock.contains(r)) prdStock.add(r);
             else prdStock.forEach(q -> {if (q.getId_prod() == r.getId_prod()) q.setCant(q.getCant() + r.getCant());});
         });
-        prdStock.forEach(System.out::println);
         prdStock.forEach(q -> comandaProductes(q.getId_prod(), q.getCant()));
     }
 

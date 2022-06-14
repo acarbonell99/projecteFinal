@@ -3,6 +3,7 @@ package com.projecte.tpv;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class HelloApplication extends Application {
         stage.setTitle("Inici");
         stage.setScene(scene);
         stage.setMaximized(true);
+        stage.getIcons().add(new Image(VendaController.class.getResourceAsStream("img/logo.png")));
         stage.show();
     }
 
